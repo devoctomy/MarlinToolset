@@ -28,8 +28,6 @@ namespace MarlinToolset.ViewModels
             OnSave = onSave;
             ValidationContext = new ValidationContext();
 
-            // validation logic here
-
             Add = ReactiveCommand.Create(new Action(OnAdd));
             Remove = ReactiveCommand.Create(new Action(OnRemove));
             Clear = ReactiveCommand.Create(new Action(OnClear));

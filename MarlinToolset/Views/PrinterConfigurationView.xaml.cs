@@ -1,19 +1,16 @@
 ﻿using MarlinToolset.ViewModels;
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
+using System;
 using System.Reactive.Disposables;
 
 namespace MarlinToolset.Views
 {
-    /// <summary>
-    /// Interaction logic for PrinterConfigurationView.xaml
-    /// </summary>
     public partial class PrinterConfigurationView : ReactiveWindow<PrinterConfigurationViewModel>
     {
         public PrinterConfigurationView()
         {
             InitializeComponent();
-            ViewModel = new PrinterConfigurationViewModel(new System.Action(OnSave));
+            ViewModel = new PrinterConfigurationViewModel(new Action(OnSave));
 
             this.WhenActivated(disposableRegistration =>
             {

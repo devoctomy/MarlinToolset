@@ -7,18 +7,15 @@ using MarlinToolset.Services;
 
 namespace MarlinToolset
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private readonly ServiceProvider _serviceProvider;
+        public static ServiceProvider ServiceProvider { get; private set; }
 
         public App()
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
-            _serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
 
             Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
         }
@@ -34,7 +31,7 @@ namespace MarlinToolset
         {
             base.OnStartup(e);
 
-            var mainWindow = _serviceProvider.GetService<MainWindow>();
+            var mainWindow = ServiceProvider.GetService<MainWindow>();
             mainWindow.Show();
         }
 

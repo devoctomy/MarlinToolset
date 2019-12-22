@@ -1,4 +1,5 @@
 ﻿using MarlinToolset.Services;
+using MarlinToolset.Views;
 using System.Windows;
 
 namespace MarlinToolset
@@ -16,7 +17,12 @@ namespace MarlinToolset
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //test printers configuration view
+            var printersConfigurationView = new PrintersConfigurationView(); // _printerConfigurationManagerService);
+            var result = printersConfigurationView.ShowDialog();
+            if (result.HasValue)
+            {
+
+            }
         }
     }
 }
