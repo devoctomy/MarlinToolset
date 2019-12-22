@@ -1,0 +1,65 @@
+﻿<reactiveui:ReactiveWindow x:Class="MarlinToolset.Views.PrinterConfigurationView"
+        x:TypeArguments="localvms:PrinterConfigurationViewModel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:localvms="clr-namespace:MarlinToolset.ViewModels"
+        xmlns:local="clr-namespace:MarlinToolset.Views"
+        xmlns:reactiveui="http://reactiveui.net"
+        mc:Ignorable="d"
+        Title="Printer Configuration"
+        Height="664"
+        Width="362">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="48"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="16">
+            <Label Content="Name"></Label>
+            <TextBox x:Name="PrinterName"></TextBox>
+            <Label Content="Serial Port"></Label>
+            <ComboBox x:Name="AvailableSerialPorts"
+                      DisplayMemberPath="."/>
+            <Label Content="Baud Rate"></Label>
+            <ComboBox x:Name="BaudRates"
+                      DisplayMemberPath="."/>
+            <GroupBox Margin="0,8,0,0"
+                      Header="Bed Size">
+                <StackPanel>
+                    <Label Content="X (mm)"></Label>
+                    <TextBox x:Name="BedXSize"></TextBox>
+                    <Label Content="Y (mm)"></Label>
+                    <TextBox x:Name="BedYSize"></TextBox>
+                    <Label Content="Z (mm)"></Label>
+                    <TextBox x:Name="BedZSize"></TextBox>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Margin="0,8,0,0"
+                      Header="Printable Area Margins">
+                <StackPanel>
+                    <Label Content="Back (mm)"></Label>
+                    <TextBox x:Name="PrintableAreaMarginBack"></TextBox>
+                    <Label Content="Front (mm)"></Label>
+                    <TextBox x:Name="PrintableAreaMarginFront"></TextBox>
+                    <Label Content="Left (mm)"></Label>
+                    <TextBox x:Name="PrintableAreaMarginLeft"></TextBox>
+                    <Label Content="Right (mm)"></Label>
+                    <TextBox x:Name="PrintableAreaMarginRight"></TextBox>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Margin="8">
+            <Button x:Name="OkButton"
+                    Width="96">OK</Button>
+            <Button x:Name="CancelButton"
+                    Width="96"
+                    Margin="8,0,0,0">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</reactiveui:ReactiveWindow>
