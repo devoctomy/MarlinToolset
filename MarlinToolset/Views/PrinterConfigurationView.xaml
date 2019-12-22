@@ -9,9 +9,9 @@
         xmlns:reactiveui="http://reactiveui.net"
         mc:Ignorable="d"
         Title="Printer Configuration"
-        Height="664"
+        Height="611"
         Width="362">
-    <Grid>
+    <Grid Height="588">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="48"></RowDefinition>
