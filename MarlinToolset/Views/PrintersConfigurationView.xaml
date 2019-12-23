@@ -9,22 +9,43 @@
         xmlns:reactiveui="http://reactiveui.net"
         mc:Ignorable="d"
         Title="Printers Configuration"
-        Height="450"
-        Width="800">
+        Height="284"
+        Width="583">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="48"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Row="1"
-            Orientation="Horizontal"
-            HorizontalAlignment="Right"
-            Margin="8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="112"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListBox Margin="8">
+                
+            </ListBox>
+            <StackPanel Grid.Column="1"
+                        Margin="8">
+                <Button x:Name="AddButton"
+                        Width="96"
+                        Height="32"
+                        Click="AddButton_Click">Add</Button>
+                <Button x:Name="RemoveButton"
+                        Width="96"
+                        Height="32"
+                        Margin="0,8,0,0">Remove</Button>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="8">
             <Button x:Name="OkButton"
-                    Width="96">OK</Button>
+                    Width="96"
+                    Height="32">OK</Button>
             <Button x:Name="CancelButton"
                     Width="96"
+                    Height="32"
                     Margin="8,0,0,0">Cancel</Button>
         </StackPanel>
     </Grid>

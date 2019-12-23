@@ -9,14 +9,14 @@
         xmlns:reactiveui="http://reactiveui.net"
         mc:Ignorable="d"
         Title="Printer Configuration"
-        Height="611"
-        Width="362">
-    <Grid Height="588">
+        Height="614"
+        Width="347">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="48"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Margin="16">
+        <StackPanel Margin="16,16,16,16" Grid.ColumnSpan="2">
             <Label Content="Name"></Label>
             <TextBox x:Name="PrinterName"></TextBox>
             <Label Content="Serial Port"></Label>
@@ -54,6 +54,7 @@
             Grid.Row="1"
             Orientation="Horizontal"
             HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
             Margin="8">
             <Button x:Name="OkButton"
                     Width="96">OK</Button>
