@@ -19,7 +19,7 @@ namespace MarlinToolset
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
-            ServiceProvider.UseMicrosoftDependencyResolver();
+            ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat
             //Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
         }
 

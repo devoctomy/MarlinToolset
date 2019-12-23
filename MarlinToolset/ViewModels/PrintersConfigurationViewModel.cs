@@ -13,7 +13,6 @@ namespace MarlinToolset.ViewModels
     {
         public ValidationContext ValidationContext { get; }
         public ReactiveCommand<Unit, Unit> Save { get; }
-        public Action OnSave { get; }
         public ReactiveCommand<Unit, Unit> Add { get; }
         public ReactiveCommand<Unit, Unit> Remove { get; }
         public ReactiveCommand<Unit, Unit> Clear { get; }
@@ -25,13 +24,12 @@ namespace MarlinToolset.ViewModels
             Action onSave)
         {
             _printerConfigurationManagerService = printerConfigurationManagerService;
-            OnSave = onSave;
             ValidationContext = new ValidationContext();
 
             Add = ReactiveCommand.Create(new Action(OnAdd));
             Remove = ReactiveCommand.Create(new Action(OnRemove));
             Clear = ReactiveCommand.Create(new Action(OnClear));
-            Save = ReactiveCommand.Create(OnSave, this.IsValid());
+            Save = ReactiveCommand.Create(onSave, this.IsValid());
         }
 
         private void OnAdd()
