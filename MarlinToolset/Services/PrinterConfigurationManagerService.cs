@@ -38,7 +38,7 @@ namespace MarlinToolset.Services
         private void Load()
         {
             var configFilePath = _storagePathService.UserAppConfigPrinterConfigurationsFilePath;
-            if(File.Exists(configFilePath))
+            if(_fileIOService.Exists(configFilePath))
             {
                 var configData = _fileIOService.ReadAllText(configFilePath);
                 Config = JsonConvert.DeserializeObject<PrintersConfigurationModel>(configData);
