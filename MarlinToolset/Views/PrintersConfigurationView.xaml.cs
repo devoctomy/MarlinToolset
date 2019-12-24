@@ -4,7 +4,6 @@ using MarlinToolset.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
-using System.Windows;
 
 namespace MarlinToolset.Views
 {
@@ -17,12 +16,38 @@ namespace MarlinToolset.Views
             InitializeComponent();
             _serviceProvider = serviceProvider;
             _printerConfigurationManagerService = _serviceProvider.GetService<IPrinterConfigurationManagerService>();
-            ViewModel = new PrintersConfigurationViewModel(
-                _printerConfigurationManagerService,
-                new Action(OnSave));
+            ViewModel = new PrintersConfigurationViewModel(_printerConfigurationManagerService);
+            ViewModel.Saved += ViewModel_Saved;
 
             this.WhenActivated(disposableRegistration =>
             {
+                this.OneWayBind(ViewModel,
+                    viewModel => viewModel.PrinterConfigurationManagerService.Config.Printers,
+                    view => view.PrintersListBox.ItemsSource)
+                .DisposeWith(disposableRegistration);
+
+                this.Bind(ViewModel,
+                    viewModel => viewModel.SelectedPrinter,
+                    view => view.PrintersListBox.SelectedItem)
+                .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.Add,
+                    view => view.AddButton)
+                .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.Remove,
+                    view => view.RemoveButton)
+                .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.Clear,
+                    view => view.ClearButton)
+                .DisposeWith(disposableRegistration);
 
                 this.BindCommand(
                     this.ViewModel,
@@ -32,20 +57,10 @@ namespace MarlinToolset.Views
             });
         }
 
-        private void OnSave()
+        private void ViewModel_Saved(object sender, EventArgs e)
         {
             DialogResult = true;
             Close();
-        }
-
-        private void AddButton_Click(object sender, RoutedEventArgs e)
-        {
-            var printerConfigurationView = _serviceProvider.GetService<PrinterConfigurationView>();
-            var result = printerConfigurationView.ShowDialog();
-            if (result.HasValue)
-            {
-                
-            }
         }
     }
 }

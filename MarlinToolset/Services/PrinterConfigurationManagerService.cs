@@ -19,19 +19,16 @@ namespace MarlinToolset.Services
         public void Add(PrinterConfigurationModel printerConfigurationModel)
         {
             Config.Printers.Add(printerConfigurationModel);
-            Save();
         }
 
         public void Remove(PrinterConfigurationModel printerConfigurationModel)
         {
             Config.Printers.Remove(printerConfigurationModel);
-            Save();
         }
 
         public void Clear()
         {
             Config.Printers.Clear();
-            Save();
         }
 
         private void Load()
@@ -44,7 +41,7 @@ namespace MarlinToolset.Services
             }
         }
 
-        private void Save()
+        public void Save()
         {
             var configFilePath = _storagePathService.UserAppConfigPrinterConfigurationsFilePath;
             var configData = JsonConvert.SerializeObject(Config);

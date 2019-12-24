@@ -1,12 +1,32 @@
-﻿<Window x:Class="MarlinToolset.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MarlinToolset"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Click Me!" Click="Button_Click"></Button>
-    </Grid>
-</Window>
+﻿<reactiveui:ReactiveWindow x:Class="MarlinToolset.MainWindow"
+                           x:TypeArguments="localvms:MainWindowViewModel"
+                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:localvms="clr-namespace:MarlinToolset.ViewModels"
+                           xmlns:local="clr-namespace:MarlinToolset"
+                           xmlns:reactiveui="http://reactiveui.net"
+                           mc:Ignorable="d"
+                           Title="Marlin Toolset"
+                           Height="450"
+                           Width="800">
+    <DockPanel>
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <ComboBox x:Name="PrintersComboBox"
+                          Width="128">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="8">
+                                <TextBlock Text="{Binding Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button x:Name="ConfigurePrintersButton"
+                        Content="Configure" />
+            </ToolBar>
+        </ToolBarTray>
+    </DockPanel>
+</reactiveui:ReactiveWindow>

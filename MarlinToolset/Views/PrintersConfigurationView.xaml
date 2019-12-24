@@ -21,19 +21,29 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="112"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox Margin="8">
-                
+            <ListBox x:Name="PrintersListBox"
+                     Margin="8">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="8">
+                            <TextBlock Text="{Binding Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel Grid.Column="1"
                         Margin="8">
                 <Button x:Name="AddButton"
                         Width="96"
-                        Height="32"
-                        Click="AddButton_Click">Add</Button>
+                        Height="32">Add</Button>
                 <Button x:Name="RemoveButton"
                         Width="96"
                         Height="32"
                         Margin="0,8,0,0">Remove</Button>
+                <Button x:Name="ClearButton"
+                        Width="96"
+                        Height="32"
+                        Margin="0,8,0,0">Clear</Button>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1"
@@ -43,10 +53,6 @@
             <Button x:Name="OkButton"
                     Width="96"
                     Height="32">OK</Button>
-            <Button x:Name="CancelButton"
-                    Width="96"
-                    Height="32"
-                    Margin="8,0,0,0">Cancel</Button>
         </StackPanel>
     </Grid>
 </reactiveui:ReactiveWindow>

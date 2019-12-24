@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 namespace MarlinToolset.Model
@@ -7,6 +7,6 @@ namespace MarlinToolset.Model
     public class PrintersConfigurationModel
     {
         [DataMember]
-        public IList<PrinterConfigurationModel> Printers { get; set; } = new List<PrinterConfigurationModel>();
+        public ObservableCollection<PrinterConfigurationModel> Printers { get; set; } = new ObservableCollection<PrinterConfigurationModel>();
     }
 }
