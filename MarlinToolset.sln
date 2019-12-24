@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{091E904E-7BA5-492F-A27E-FB682B141201}"
 	ProjectSection(SolutionItems) = preProject
 		.travis.yml = .travis.yml
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
