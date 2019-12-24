@@ -4,7 +4,5 @@ mono: none
 
 script:
 - choco install dotnetcore-sdk
-- dotnet --version
-- dotnet restore
 - dotnet build
 - dotnet test MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj
