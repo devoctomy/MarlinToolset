@@ -33,6 +33,7 @@ namespace MarlinToolset
 
         private void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IFileIOService, FileIOService>();
             services.AddSingleton<IStoragePathService, WindowsStoragePathService>();
             services.AddSingleton<IPrinterConfigurationManagerService, PrinterConfigurationManagerService>();
             services.AddTransient<PrinterConfigurationView>();

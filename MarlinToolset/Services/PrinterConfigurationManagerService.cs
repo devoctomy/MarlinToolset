@@ -8,10 +8,14 @@ namespace MarlinToolset.Services
     {
         public PrintersConfigurationModel Config { get; set; }
         private readonly IStoragePathService _storagePathService;
+        private readonly IFileIOService _fileIOService;
 
-        public PrinterConfigurationManagerService(IStoragePathService storagePathService)
+        public PrinterConfigurationManagerService(
+            IStoragePathService storagePathService,
+            IFileIOService fileIOService)
         {
             _storagePathService = storagePathService;
+            _fileIOService = fileIOService;
             Config = new PrintersConfigurationModel();
             Load();
         }
@@ -36,7 +40,7 @@ namespace MarlinToolset.Services
             var configFilePath = _storagePathService.UserAppConfigPrinterConfigurationsFilePath;
             if(File.Exists(configFilePath))
             {
-                var configData = File.ReadAllText(configFilePath);
+                var configData = _fileIOService.ReadAllText(configFilePath);
                 Config = JsonConvert.DeserializeObject<PrintersConfigurationModel>(configData);
             }
         }
@@ -47,7 +51,9 @@ namespace MarlinToolset.Services
             var configData = JsonConvert.SerializeObject(Config);
             var configFile = new FileInfo(configFilePath);
             configFile.Directory.Create();
-            File.WriteAllText(configFilePath, configData);
+            _fileIOService.WriteAllText(
+                configFilePath,
+                configData);
         }
     }
 }
