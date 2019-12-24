@@ -1,0 +1,12 @@
+os:
+  - linux
+language: csharp
+solution: MarlinToolset.sln
+mono: none
+dotnet: 3.0.0
+install:
+  - dotnet restore
+
+script:
+- dotnet build
+- dotnet test MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj
