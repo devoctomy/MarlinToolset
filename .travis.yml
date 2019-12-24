@@ -1,11 +1,8 @@
-os:
-  - linux
+sudo: required
+dist: bionic
 language: csharp
 solution: MarlinToolset.sln
-mono: none
-dotnet: 3.0.0
-install:
-  - dotnet restore
+mono: latest
 
 script:
 - dotnet build
