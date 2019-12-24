@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{476A9E53-2605-4F7D-979D-50E72CAFD658}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarlinToolset.UnitTests", "MarlinToolset.UnitTests\MarlinToolset.UnitTests.csproj", "{504070D5-338E-4046-BBAE-F3004B40BC80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +24,16 @@ Global
 		{19BDB3F5-7D62-4A26-95D9-311CE7D07A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19BDB3F5-7D62-4A26-95D9-311CE7D07A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19BDB3F5-7D62-4A26-95D9-311CE7D07A13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504070D5-338E-4046-BBAE-F3004B40BC80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504070D5-338E-4046-BBAE-F3004B40BC80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504070D5-338E-4046-BBAE-F3004B40BC80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504070D5-338E-4046-BBAE-F3004B40BC80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{504070D5-338E-4046-BBAE-F3004B40BC80} = {476A9E53-2605-4F7D-979D-50E72CAFD658}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {87B4BE99-0B14-43C3-9515-52A0E45B2046}
