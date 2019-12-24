@@ -31,6 +31,10 @@ namespace MarlinToolset.UnitTests.Services
                 PrintableAreaMarginRight = 107
             };
 
+            mockFileIOService.Setup(x => x.Exists(
+                It.IsAny<string>()))
+                .Returns(true);
+
             mockFileIOService.Setup(x => x.ReadAllText(
                 It.IsAny<string>()))
                 .Returns("{}");
@@ -52,6 +56,10 @@ namespace MarlinToolset.UnitTests.Services
         {
             // Arrange
             var mockFileIOService = new Mock<IFileIOService>();
+
+            mockFileIOService.Setup(x => x.Exists(
+                It.IsAny<string>()))
+                .Returns(true);
 
             mockFileIOService.Setup(x => x.ReadAllText(
                 It.IsAny<string>()))
@@ -75,6 +83,10 @@ namespace MarlinToolset.UnitTests.Services
             // Arrange
             var mockFileIOService = new Mock<IFileIOService>();
 
+            mockFileIOService.Setup(x => x.Exists(
+                It.IsAny<string>()))
+                .Returns(true);
+
             mockFileIOService.Setup(x => x.ReadAllText(
                 It.IsAny<string>()))
                 .Returns("{\"Printers\":[{},{}]}");
@@ -96,6 +108,10 @@ namespace MarlinToolset.UnitTests.Services
             // Arrange
             var windowsStoragePathService = new WindowsStoragePathService();
             var mockFileIOService = new Mock<IFileIOService>();
+
+            mockFileIOService.Setup(x => x.Exists(
+                It.IsAny<string>()))
+                .Returns(true);
 
             mockFileIOService.Setup(x => x.ReadAllText(
                 It.IsAny<string>()))

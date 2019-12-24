@@ -6,5 +6,7 @@
         void WriteAllText(
             string path,
             string contents);
+
+        bool Exists(string path);
     }
 }
