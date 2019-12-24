@@ -10,7 +10,9 @@
         mc:Ignorable="d"
         Title="Printers Configuration"
         Height="284"
-        Width="583">
+        Width="583"
+        Icon="/MarlinToolset;component/Images/printer_24.png"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -25,9 +27,13 @@
                      Margin="8">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="8">
-                            <TextBlock Text="{Binding Name}" />
-                        </Grid>
+                        <StackPanel Orientation="Horizontal"
+                                        Margin="8">
+                            <Image Source="/MarlinToolset;component/Images/printer_24.png" />
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="8,0,0,0"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -53,6 +59,10 @@
             <Button x:Name="OkButton"
                     Width="96"
                     Height="32">OK</Button>
+            <Button x:Name="CancelButton"
+                    Width="96"
+                    Height="32"
+                    Margin="8,0,0,0">Cancel</Button>
         </StackPanel>
     </Grid>
 </reactiveui:ReactiveWindow>

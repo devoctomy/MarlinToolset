@@ -18,6 +18,7 @@ namespace MarlinToolset.Views
             _printerConfigurationManagerService = _serviceProvider.GetService<IPrinterConfigurationManagerService>();
             ViewModel = new PrintersConfigurationViewModel(_printerConfigurationManagerService);
             ViewModel.Saved += ViewModel_Saved;
+            ViewModel.Cancelled += ViewModel_Cancelled;
 
             this.WhenActivated(disposableRegistration =>
             {
@@ -54,7 +55,18 @@ namespace MarlinToolset.Views
                     viewModel => viewModel.Save,
                     view => view.OkButton)
                 .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.Cancel,
+                    view => view.CancelButton)
+                .DisposeWith(disposableRegistration);
             });
+        }
+
+        private void ViewModel_Cancelled(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void ViewModel_Saved(object sender, EventArgs e)

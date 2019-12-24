@@ -6,20 +6,24 @@ using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 using System;
+using System.Linq;
 using System.Reactive;
 using System.Windows;
+using System.Windows.Interop;
 
 namespace MarlinToolset.ViewModels
 {
     public class PrintersConfigurationViewModel : ReactiveObject, IValidatableViewModel
     {
         public event EventHandler<EventArgs> Saved;
+        public event EventHandler<EventArgs> Cancelled;
 
         public ValidationContext ValidationContext { get; }
-        public ReactiveCommand<Unit, Unit> Save { get; }
         public ReactiveCommand<Unit, Unit> Add { get; }
         public ReactiveCommand<Unit, Unit> Remove { get; }
         public ReactiveCommand<Unit, Unit> Clear { get; }
+        public ReactiveCommand<Unit, Unit> Save { get; }
+        public ReactiveCommand<Unit, Unit> Cancel { get; }
         public PrinterConfigurationModel SelectedPrinter { get; set; }
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
 
@@ -32,13 +36,15 @@ namespace MarlinToolset.ViewModels
             Remove = ReactiveCommand.Create(new Action(OnRemove));
             Clear = ReactiveCommand.Create(new Action(OnClear));
             Save = ReactiveCommand.Create(new Action(OnSave), this.IsValid());
+            Cancel = ReactiveCommand.Create(new Action(OnCancel));
         }
 
         private void OnAdd()
         {
             var printerConfigurationView = new PrinterConfigurationView();
+            printerConfigurationView.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             var result = printerConfigurationView.ShowDialog();
-            if (result.HasValue)
+            if (result.HasValue && result.Value)
             {
                 PrinterConfigurationManagerService.Add(printerConfigurationView.ViewModel.Model);
             }
@@ -49,6 +55,7 @@ namespace MarlinToolset.ViewModels
             if (SelectedPrinter != null)
             {
                 if(MessageBox.Show(
+                    Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive),
                     $"Are you sure you want to remove the printer '{SelectedPrinter.Name}'?",
                     "Remove Printer",
                     MessageBoxButton.YesNo,
@@ -69,6 +76,11 @@ namespace MarlinToolset.ViewModels
         {
             PrinterConfigurationManagerService.Save();
             Saved?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnCancel()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
         }
     }
 }

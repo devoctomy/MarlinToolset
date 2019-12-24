@@ -12,6 +12,9 @@ namespace MarlinToolset.ViewModels
 {
     public class PrinterConfigurationViewModel : ReactiveObject, IValidatableViewModel
     {
+        public event EventHandler<EventArgs> Saved;
+        public event EventHandler<EventArgs> Cancelled;
+
         public ValidationContext ValidationContext { get; }
 
         public PrinterConfigurationModel Model { get; private set; }
@@ -36,12 +39,10 @@ namespace MarlinToolset.ViewModels
         };
 
         public ReactiveCommand<Unit, Unit> Save { get; }
+        public ReactiveCommand<Unit, Unit> Cancel { get; }
 
-        public Action OnSave { get; } 
-
-        public PrinterConfigurationViewModel(Action onSave)
+        public PrinterConfigurationViewModel()
         {
-            OnSave = onSave;
             Model = new PrinterConfigurationModel();
             ValidationContext = new ValidationContext();
 
@@ -96,6 +97,17 @@ namespace MarlinToolset.ViewModels
                 "You must specify a valid printable area right margin.");
 
             Save = ReactiveCommand.Create(OnSave, this.IsValid());
+            Cancel = ReactiveCommand.Create(OnCancel);
+        }
+
+        private void OnSave()
+        {
+            Saved?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnCancel()
+        {
+            Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
     }

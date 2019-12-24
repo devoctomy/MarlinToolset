@@ -24,8 +24,16 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-                <Button x:Name="ConfigurePrintersButton"
-                        Content="Configure" />
+                <Button x:Name="ConfigurePrintersButton">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/MarlinToolset;component/Images/printer_24.png" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="ConnectToggleButton">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/MarlinToolset;component/Images/connect_24.png" />
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarTray>
     </DockPanel>

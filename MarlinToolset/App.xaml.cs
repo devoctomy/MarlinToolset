@@ -17,23 +17,27 @@ namespace MarlinToolset
         public App()
         {
             var serviceCollection = new ServiceCollection();
+            ConfigureReactive(serviceCollection);
             ConfigureServices(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat
-            //Locator.CurrentMutable.RegisterViewsForViewModels(Assembly.GetCallingAssembly());
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private void ConfigureReactive(IServiceCollection services)
         {
             services.UseMicrosoftDependencyResolver();
             var resolver = Locator.CurrentMutable;
             resolver.InitializeSplat();
             resolver.InitializeReactiveUI();
+        }
 
+        private void ConfigureServices(IServiceCollection services)
+        {
             services.AddSingleton<IStoragePathService, WindowsStoragePathService>();
             services.AddSingleton<IPrinterConfigurationManagerService, PrinterConfigurationManagerService>();
-            services.AddScoped<PrinterConfigurationView>();
-            services.AddScoped<PrintersConfigurationView>();
+            services.AddTransient<PrinterConfigurationView>();
+            services.AddTransient<PrintersConfigurationView>();
+            services.AddScoped<IPrinterControllerService, MarlinPrinterControllerService>();
             services.AddSingleton<MainWindow>();
         }
 

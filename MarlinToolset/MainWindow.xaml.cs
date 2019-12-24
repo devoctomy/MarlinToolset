@@ -8,20 +8,18 @@ namespace MarlinToolset
 {
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
-        private readonly IServiceProvider _serviceProvider;
-        private IPrinterConfigurationManagerService _printerConfigurationManagerService;
 
         public MainWindow(
             IServiceProvider serviceProvider,
-            IPrinterConfigurationManagerService printerConfigurationManagerService)
+            IPrinterConfigurationManagerService printerConfigurationManagerService,
+            IPrinterControllerService printerControllerService)
         {
             InitializeComponent();
 
-            _serviceProvider = serviceProvider;
-            _printerConfigurationManagerService = printerConfigurationManagerService;
             ViewModel = new MainWindowViewModel(
-                _serviceProvider,
-                _printerConfigurationManagerService);
+                serviceProvider,
+                printerConfigurationManagerService,
+                printerControllerService);
 
             this.WhenActivated(disposableRegistration =>
             {
@@ -39,6 +37,12 @@ namespace MarlinToolset
                     this.ViewModel,
                     viewModel => viewModel.ConfigurePrinters,
                     view => view.ConfigurePrintersButton)
+                .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.ConnectToggle,
+                    view => view.ConnectToggleButton)
                 .DisposeWith(disposableRegistration);
             });
         }

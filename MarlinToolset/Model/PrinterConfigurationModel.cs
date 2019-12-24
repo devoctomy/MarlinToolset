@@ -1,5 +1,6 @@
 ﻿using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using System;
 using System.Runtime.Serialization;
 
 namespace MarlinToolset.Model
@@ -7,6 +8,10 @@ namespace MarlinToolset.Model
     [DataContract]
     public class PrinterConfigurationModel : ReactiveObject
     {
+        [Reactive]
+        [DataMember]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
         [Reactive]
         [DataMember]
         public string Name { get; set; } = "New Printer";

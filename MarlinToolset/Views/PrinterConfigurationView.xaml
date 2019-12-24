@@ -10,7 +10,9 @@
         mc:Ignorable="d"
         Title="Printer Configuration"
         Height="614"
-        Width="347">
+        Width="347"
+        Icon="/MarlinToolset;component/Images/printer_24.png"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
