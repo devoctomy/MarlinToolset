@@ -5,4 +5,4 @@ mono: none
 script:
 - choco install dotnetcore-sdk
 - dotnet build
-- dotnet test MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj
+- dotnet test -c Release MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
