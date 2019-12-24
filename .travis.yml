@@ -6,4 +6,4 @@ script:
 - choco install dotnetcore-sdk
 - choco install codecov
 - dotnet build -c Release
-- dotnet test -c Release MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --no-build
+- dotnet test -c Release MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj -p:CollectCoverage=true -p:CoverletOutputFormat=opencover --no-build
