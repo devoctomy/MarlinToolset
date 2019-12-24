@@ -10,6 +10,7 @@ namespace MarlinToolset.Services
         void Add(PrinterConfigurationModel printerConfigurationModel);
         void Remove(PrinterConfigurationModel printerConfigurationModel);
         void Clear();
+        bool Load();
         void Save();
     }
 }

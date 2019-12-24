@@ -41,7 +41,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object);
+                mockFileIOService.Object,
+                true);
 
             // Act
             sut.Add(config);
@@ -67,7 +68,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object);
+                mockFileIOService.Object,
+                true);
 
             // Act
             sut.Remove(sut.Config.Printers.First());
@@ -93,7 +95,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object);
+                mockFileIOService.Object,
+                true);
 
             // Act
             sut.Clear();
@@ -119,7 +122,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 windowsStoragePathService,
-                mockFileIOService.Object);
+                mockFileIOService.Object,
+                true);
 
             // Act
             sut.Save();
@@ -129,6 +133,29 @@ namespace MarlinToolset.UnitTests.Services
             mockFileIOService.Verify(x => x.WriteAllText(
                 It.Is<string>(x => x == windowsStoragePathService.UserAppConfigPrinterConfigurationsFilePath),
                 It.Is<string>(x => x == configJson)), Times.Once);
+        }
+
+        [Fact]
+        public void GivenConfigNotExists_WhenLoad_ThenNoPrintersAreLoaded()
+        {
+            // Arrange
+            var windowsStoragePathService = new WindowsStoragePathService();
+            var mockFileIOService = new Mock<IFileIOService>();
+
+            mockFileIOService.Setup(x => x.Exists(
+                It.IsAny<string>()))
+                .Returns(false);
+
+            var sut = new PrinterConfigurationManagerService(
+                windowsStoragePathService,
+                mockFileIOService.Object,
+                false);
+
+            // Act
+            var result = sut.Load();
+
+            // Assert
+            Assert.False(result);
         }
     }
 }

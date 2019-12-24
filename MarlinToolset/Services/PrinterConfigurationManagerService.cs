@@ -12,12 +12,13 @@ namespace MarlinToolset.Services
 
         public PrinterConfigurationManagerService(
             IStoragePathService storagePathService,
-            IFileIOService fileIOService)
+            IFileIOService fileIOService,
+            bool load)
         {
             _storagePathService = storagePathService;
             _fileIOService = fileIOService;
             Config = new PrintersConfigurationModel();
-            Load();
+            if(load) Load();
         }
 
         public void Add(PrinterConfigurationModel printerConfigurationModel)
@@ -35,14 +36,18 @@ namespace MarlinToolset.Services
             Config.Printers.Clear();
         }
 
-        private void Load()
+        public bool Load()
         {
+            var loaded = false;
             var configFilePath = _storagePathService.UserAppConfigPrinterConfigurationsFilePath;
             if(_fileIOService.Exists(configFilePath))
             {
                 var configData = _fileIOService.ReadAllText(configFilePath);
                 Config = JsonConvert.DeserializeObject<PrintersConfigurationModel>(configData);
+                loaded = true;
             }
+
+            return loaded;
         }
 
         public void Save()
