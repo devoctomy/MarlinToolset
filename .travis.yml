@@ -7,3 +7,4 @@ script:
 - choco install codecov
 - dotnet build -c Release
 - dotnet test -c Release MarlinToolset.UnitTests/MarlinToolset.UnitTests.csproj -p:CollectCoverage=true -p:CoverletOutputFormat=opencover --no-build
+- codecov -f "MarlinToolset.UnitTests/coverage.opencover.xml" -t 897ab45c-78db-4827-9f29-bc82d82676f8
