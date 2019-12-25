@@ -1,4 +1,5 @@
 ﻿using MarlinToolset.Services;
+using System;
 using System.IO.Ports;
 
 namespace MarlinToolset.UnitTests.Services
@@ -8,6 +9,7 @@ namespace MarlinToolset.UnitTests.Services
         public event SerialDataReceivedEventHandler DataReceived;
         public bool IsOpen { get; private set; }
         public bool Disposed { get; private set; }
+        public Action<byte[], int, int> WriteCallback { get; set; }
 
         private string _portName;
         private int _baudRate;
@@ -45,6 +47,10 @@ namespace MarlinToolset.UnitTests.Services
             int offset,
             int count)
         {
+            WriteCallback(
+                data,
+                offset,
+                count);
         }
     }
 }
