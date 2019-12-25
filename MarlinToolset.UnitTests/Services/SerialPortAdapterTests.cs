@@ -139,5 +139,56 @@ namespace MarlinToolset.UnitTests.Services
             Assert.Equal(expectedOffset, actualOffset);
             Assert.Equal(expectedCount, actualCount);
         }
+
+        [Fact]
+        public void GivenConnected_AndPortRef_WhenGetSerialPort_ThenCorrectSerialPortReturned()
+        {
+            // Arrange
+            var config = new PrinterConfigurationModel()
+            {
+                Port = "com9",
+                BaudRate = 1001
+            };
+            Action<SerialPortAdapterRef, string> callback = delegate (SerialPortAdapterRef portRef, string data)
+            {
+            };
+            var sut = new SerialPortAdapter<TestableSerialPort>();
+            var portRef = sut.Connect(
+                config,
+                callback);
+
+            // Act
+            var port = sut.GetSerialPort(portRef);
+
+            // Assert
+            Assert.Equal(config.Port, port.PortName);
+            Assert.Equal(config.BaudRate, port.BaudRate);
+        }
+
+        [Fact]
+        public void GivenConnected_WhenDispose_ThenAllPortsDisposed()
+        {
+            // Arrange
+            var config = new PrinterConfigurationModel()
+            {
+                Port = "com9",
+                BaudRate = 1001
+            };
+            Action<SerialPortAdapterRef, string> callback = delegate (SerialPortAdapterRef portRef, string data)
+            {
+            };
+            var sut = new SerialPortAdapter<TestableSerialPort>();
+            var portRef = sut.Connect(
+                config,
+                callback);
+            var port = (TestableSerialPort)sut.GetSerialPort(portRef);
+
+            // Act
+            sut.Dispose();
+
+            // Assert
+            Assert.Empty(sut.PortRefs);
+            Assert.True(port.Disposed);
+        }
     }
 }

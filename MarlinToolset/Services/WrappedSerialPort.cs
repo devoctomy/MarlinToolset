@@ -8,16 +8,20 @@ namespace MarlinToolset.Services
         public event SerialDataReceivedEventHandler DataReceived;
 
         public bool IsOpen { get; private set; }
+        public string PortName { get; private set; }
+        public int BaudRate { get; private set; }
 
         private SerialPort _serialPort;
         private bool _disposed;
 
         public WrappedSerialPort(
-            string port,
+            string portName,
             int baudRate)
         {
+            PortName = portName;
+            BaudRate = baudRate;
             _serialPort = new SerialPort(
-                port,
+                portName,
                 baudRate);
             _serialPort.DataReceived += DataReceived;
         }

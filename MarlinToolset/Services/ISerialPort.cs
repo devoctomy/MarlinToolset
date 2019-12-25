@@ -9,6 +9,8 @@ namespace MarlinToolset.Services
     {
         event SerialDataReceivedEventHandler DataReceived;
         bool IsOpen { get; }
+        string PortName { get; }
+        int BaudRate { get; }
         void Open();
         void Close();
         void Write(byte[] data, int offset, int count);

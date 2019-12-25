@@ -8,6 +8,7 @@ namespace MarlinToolset.UnitTests.Services
 {
     public class TestableSerialPortAdapter : ISerialPortAdapter
     {
+        public IReadOnlyList<SerialPortAdapterRef> PortRefs => null;
         public List<SerialPortAdapterWriteStringData> WrittenStringData { get; private set; }
         public List<SerialPortAdapterWriteBinaryData> WrittenBinaryData { get; private set; }
         public PrinterConfigurationModel Config { get; private set; }

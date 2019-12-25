@@ -8,18 +8,17 @@ namespace MarlinToolset.UnitTests.Services
     {
         public event SerialDataReceivedEventHandler DataReceived;
         public bool IsOpen { get; private set; }
+        public string PortName { get; private set; }
+        public int BaudRate { get; private set; }
         public bool Disposed { get; private set; }
         public Action<byte[], int, int> WriteCallback { get; set; }
-
-        private string _portName;
-        private int _baudRate;
 
         public TestableSerialPort(
             string portName,
             int baudRate)
         {
-            _portName = portName;
-            _baudRate = baudRate;
+            PortName = portName;
+            BaudRate = baudRate;
         }
 
         public void Close()

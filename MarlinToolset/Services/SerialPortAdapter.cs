@@ -1,6 +1,7 @@
 ﻿using MarlinToolset.Model;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ namespace MarlinToolset.Services
 {
     public class SerialPortAdapter<SerialPortType> : ISerialPortAdapter, IDisposable where SerialPortType : ISerialPort
     {
+        public IReadOnlyList<SerialPortAdapterRef> PortRefs => _portsByRef.Keys.ToList();
+
         private ConcurrentDictionary<SerialPortAdapterRef, ISerialPort> _portsByRef;
         private ConcurrentDictionary<ISerialPort, SerialPortAdapterRef> _refsByPort;
         private bool _disposed;
