@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MarlinToolset.Model;
+using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text;
@@ -8,8 +9,7 @@ namespace MarlinToolset.Services
     public interface ISerialPortAdapter
     {
         SerialPortAdapterRef Connect(
-            string port,
-            int baudRate,
+            PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCallback);
 
         void Disconnect(SerialPortAdapterRef portRef);

@@ -1,18 +1,18 @@
 ﻿using MarlinToolset.Model;
 using System;
+using System.Text;
 
 namespace MarlinToolset.Services
 {
     public class MarlinPrinterControllerService : IPrinterControllerService
     {
-        public PrinterConfigurationModel Printer { get; private set; }
+        public event EventHandler<PrinterControllerReceivedDataEventArgs> ReceivedData;
 
+        public PrinterConfigurationModel Printer { get; private set; }
+        public SerialPortAdapterRef SerialPortAdapterRef { get; private set; }
         public bool IsConnected => (Printer != null);
 
         private ISerialPortAdapter _serialPortAdapter;
-        private SerialPortAdapterRef _serialPortRef;
-
-        public event EventHandler<PrinterControllerReceivedDataEventArgs> ReceivedData;
 
         public MarlinPrinterControllerService(ISerialPortAdapter serialPortAdapter)
         {
@@ -21,11 +21,10 @@ namespace MarlinToolset.Services
 
         public void Connect(PrinterConfigurationModel printer)
         {
-            if(_serialPortRef == null)
+            if(SerialPortAdapterRef == null)
             {
-                _serialPortRef = _serialPortAdapter.Connect(
-                    printer.Port,
-                    printer.BaudRate,
+                SerialPortAdapterRef = _serialPortAdapter.Connect(
+                    printer,
                     new Action<SerialPortAdapterRef, string>(DataReceivedCallback));
                 Printer = printer;
             }
@@ -33,9 +32,10 @@ namespace MarlinToolset.Services
 
         public void Disconnect()
         {
-            if (_serialPortRef != null)
+            if (SerialPortAdapterRef != null)
             {
-                _serialPortAdapter.Disconnect(_serialPortRef);
+                _serialPortAdapter.Disconnect(SerialPortAdapterRef);
+                SerialPortAdapterRef = null;
                 Printer = null;
             }
         }
@@ -45,6 +45,34 @@ namespace MarlinToolset.Services
             string data)
         {
             ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Data = data });
+        }
+
+        public void Write(
+            string data,
+            Encoding encoding)
+        {
+            if (SerialPortAdapterRef != null)
+            {
+                _serialPortAdapter.Write(
+                    SerialPortAdapterRef,
+                    data,
+                    encoding);
+            }
+        }
+
+        public void Write(
+            byte[] data,
+            int offset,
+            int count)
+        {
+            if (SerialPortAdapterRef != null)
+            {
+                _serialPortAdapter.Write(
+                    SerialPortAdapterRef,
+                    data,
+                    offset,
+                    count);
+            }
         }
     }
 }

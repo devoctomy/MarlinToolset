@@ -1,5 +1,6 @@
 ﻿using MarlinToolset.Model;
 using System;
+using System.Text;
 
 namespace MarlinToolset.Services
 {
@@ -10,5 +11,14 @@ namespace MarlinToolset.Services
         bool IsConnected { get; }
         void Connect(PrinterConfigurationModel printer);
         void Disconnect();
+
+        void Write(
+            string data,
+            Encoding encoding);
+
+        void Write(
+            byte[] data,
+            int offset,
+            int count);
     }
 }

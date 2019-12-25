@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Text;
+﻿using MarlinToolset.Model;
+using System;
 
 namespace MarlinToolset.Services
 {
     public class SerialPortAdapterRef
     {
-        public string Port { get; }
-        public int BaudRate { get; }
+        public PrinterConfigurationModel Config { get; }
         public Action<SerialPortAdapterRef, string> DataReceivedCallback { get; }
 
         public SerialPortAdapterRef(
-            string port,
-            int baudRate,
+            PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCalllback)
         {
-            Port = port;
-            BaudRate = baudRate;
+            Config = config;
             DataReceivedCallback = dataReceivedCalllback;
         }
     }

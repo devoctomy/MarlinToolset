@@ -1,6 +1,6 @@
-﻿using System;
+﻿using MarlinToolset.Model;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO.Ports;
 using System.Text;
 
@@ -18,18 +18,16 @@ namespace MarlinToolset.Services
         }
 
         public SerialPortAdapterRef Connect(
-            string port,
-            int baudRate,
+            PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCallback)
         {
             var portRef = new SerialPortAdapterRef(
-                port,
-                baudRate,
+                config,
                 dataReceivedCallback);
 
             var serialPort = new SerialPort(
-                port,
-                baudRate);
+                config.Port,
+                config.BaudRate);
             serialPort.DataReceived += SerialPort_DataReceived;
             serialPort.Open();
 
