@@ -1,4 +1,5 @@
-﻿using MarlinToolset.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MarlinToolset.Services;
 using System;
 using ReactiveUI;
 using MarlinToolset.ViewModels;
@@ -16,10 +17,7 @@ namespace MarlinToolset
         {
             InitializeComponent();
 
-            ViewModel = new MainWindowViewModel(
-                serviceProvider,
-                printerConfigurationManagerService,
-                printerControllerService);
+            ViewModel = serviceProvider.GetService<MainWindowViewModel>();
 
             this.WhenActivated(disposableRegistration =>
             {

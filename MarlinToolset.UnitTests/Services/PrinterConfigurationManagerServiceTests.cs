@@ -41,8 +41,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object,
-                true);
+                mockFileIOService.Object);
+            sut.Load();
 
             // Act
             sut.Add(config);
@@ -68,8 +68,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object,
-                true);
+                mockFileIOService.Object);
+            sut.Load();
 
             // Act
             sut.Remove(sut.Config.Printers.First());
@@ -95,8 +95,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 new WindowsStoragePathService(),
-                mockFileIOService.Object,
-                true);
+                mockFileIOService.Object);
+            sut.Load();
 
             // Act
             sut.Clear();
@@ -122,8 +122,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 windowsStoragePathService,
-                mockFileIOService.Object,
-                true);
+                mockFileIOService.Object);
+            sut.Load();
 
             // Act
             sut.Save();
@@ -148,8 +148,8 @@ namespace MarlinToolset.UnitTests.Services
 
             var sut = new PrinterConfigurationManagerService(
                 windowsStoragePathService,
-                mockFileIOService.Object,
-                false);
+                mockFileIOService.Object);
+            sut.Load();
 
             // Act
             var result = sut.Load();

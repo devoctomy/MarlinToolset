@@ -1,7 +1,5 @@
 ﻿using MarlinToolset.Model;
 using System;
-using System.IO.Ports;
-using System.Threading;
 
 namespace MarlinToolset.Services
 {
@@ -11,41 +9,42 @@ namespace MarlinToolset.Services
 
         public bool IsConnected => (Printer != null);
 
-        private SerialPort _serialPort;
+        private ISerialPortAdapter _serialPortAdapter;
+        private SerialPortAdapterRef _serialPortRef;
 
         public event EventHandler<PrinterControllerReceivedDataEventArgs> ReceivedData;
 
-        public MarlinPrinterControllerService()
+        public MarlinPrinterControllerService(ISerialPortAdapter serialPortAdapter)
         {
+            _serialPortAdapter = serialPortAdapter;
         }
 
         public void Connect(PrinterConfigurationModel printer)
         {
-            if(_serialPort == null)
+            if(_serialPortRef == null)
             {
-                _serialPort = new SerialPort(
+                _serialPortRef = _serialPortAdapter.Connect(
                     printer.Port,
-                    printer.BaudRate);
-                _serialPort.DataReceived += _serialPort_DataReceived;
-                _serialPort.Open();
+                    printer.BaudRate,
+                    new Action<SerialPortAdapterRef, string>(DataReceivedCallback));
                 Printer = printer;
             }
         }
 
         public void Disconnect()
         {
-            if (_serialPort != null)
+            if (_serialPortRef != null)
             {
-                _serialPort.DataReceived -= _serialPort_DataReceived;
-                _serialPort.Close();
+                _serialPortAdapter.Disconnect(_serialPortRef);
                 Printer = null;
             }
         }
 
-        private void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedCallback(
+            SerialPortAdapterRef portRef,
+            string data)
         {
-            string rx = _serialPort.ReadExisting();
-            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Data = rx });
+            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Data = data });
         }
     }
 }

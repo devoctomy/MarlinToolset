@@ -1,5 +1,6 @@
 ﻿using MarlinToolset.Model;
 using Newtonsoft.Json;
+using System;
 using System.IO;
 
 namespace MarlinToolset.Services
@@ -12,13 +13,11 @@ namespace MarlinToolset.Services
 
         public PrinterConfigurationManagerService(
             IStoragePathService storagePathService,
-            IFileIOService fileIOService,
-            bool load)
+            IFileIOService fileIOService)
         {
             _storagePathService = storagePathService;
             _fileIOService = fileIOService;
             Config = new PrintersConfigurationModel();
-            if(load) Load();
         }
 
         public void Add(PrinterConfigurationModel printerConfigurationModel)

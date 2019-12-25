@@ -40,7 +40,9 @@ namespace MarlinToolset.ViewModels
             ConnectToggle = ReactiveCommand.Create(new Action(OnConnectToggle));
         }
 
-        private void PrinterControllerService_ReceivedData(object sender, PrinterControllerReceivedDataEventArgs e)
+        private void PrinterControllerService_ReceivedData(
+            object sender,
+            PrinterControllerReceivedDataEventArgs e)
         {
             // output the data to the screen
         }

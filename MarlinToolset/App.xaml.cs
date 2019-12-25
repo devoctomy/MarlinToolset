@@ -7,6 +7,7 @@ using MarlinToolset.Services;
 using System;
 using MarlinToolset.Views;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using MarlinToolset.ViewModels;
 
 namespace MarlinToolset
 {
@@ -19,8 +20,9 @@ namespace MarlinToolset
             var serviceCollection = new ServiceCollection();
             ConfigureReactive(serviceCollection);
             ConfigureServices(serviceCollection);
+            ConfigureViewsAndViewModels(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
-            ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat
+            ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat    
         }
 
         private void ConfigureReactive(IServiceCollection services)
@@ -35,11 +37,28 @@ namespace MarlinToolset
         {
             services.AddSingleton<IFileIOService, FileIOService>();
             services.AddSingleton<IStoragePathService, WindowsStoragePathService>();
-            services.AddSingleton<IPrinterConfigurationManagerService, PrinterConfigurationManagerService>();
+            services.AddSingleton<IPrinterConfigurationManagerService, PrinterConfigurationManagerService>(sp =>
+            {
+                var service = new PrinterConfigurationManagerService(
+                    sp.GetService<IStoragePathService>(),
+                    sp.GetService<IFileIOService>());
+                service.Load();
+                return service;
+            });
             services.AddTransient<PrinterConfigurationView>();
             services.AddTransient<PrintersConfigurationView>();
             services.AddScoped<IPrinterControllerService, MarlinPrinterControllerService>();
+            services.AddSingleton<ISerialPortAdapter, SerialPortAdapter>();
+        }
+
+        private void ConfigureViewsAndViewModels(IServiceCollection services)
+        {
             services.AddSingleton<MainWindow>();
+            services.AddTransient<PrinterConfigurationView>();
+            services.AddTransient<PrintersConfigurationView>();
+            services.AddTransient<MainWindowViewModel>();
+            services.AddTransient<PrinterConfigurationViewModel>();
+            services.AddTransient<PrintersConfigurationViewModel>();
         }
 
         protected override void OnStartup(StartupEventArgs e)

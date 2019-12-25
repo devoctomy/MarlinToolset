@@ -1,4 +1,5 @@
-﻿using MarlinToolset.ViewModels;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MarlinToolset.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
@@ -7,10 +8,14 @@ namespace MarlinToolset.Views
 {
     public partial class PrinterConfigurationView : ReactiveWindow<PrinterConfigurationViewModel>
     {
-        public PrinterConfigurationView()
+        private IServiceProvider _serviceProvider;
+
+        public PrinterConfigurationView(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-            ViewModel = new PrinterConfigurationViewModel();
+
+            _serviceProvider = serviceProvider;
+            ViewModel = _serviceProvider.GetService<PrinterConfigurationViewModel>();
             ViewModel.Saved += ViewModel_Saved;
             ViewModel.Cancelled += ViewModel_Cancelled;
 

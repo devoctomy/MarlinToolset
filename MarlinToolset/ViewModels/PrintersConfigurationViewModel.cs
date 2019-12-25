@@ -1,4 +1,5 @@
-﻿using MarlinToolset.Model;
+﻿using Microsoft.Extensions.DependencyInjection;
+using MarlinToolset.Model;
 using MarlinToolset.Services;
 using MarlinToolset.Views;
 using ReactiveUI;
@@ -9,7 +10,6 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Windows;
-using System.Windows.Interop;
 
 namespace MarlinToolset.ViewModels
 {
@@ -27,8 +27,13 @@ namespace MarlinToolset.ViewModels
         public PrinterConfigurationModel SelectedPrinter { get; set; }
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
 
-        public PrintersConfigurationViewModel(IPrinterConfigurationManagerService printerConfigurationManagerService)
+        private IServiceProvider _serviceProvider;
+
+        public PrintersConfigurationViewModel(
+            IServiceProvider serviceProvider,
+            IPrinterConfigurationManagerService printerConfigurationManagerService)
         {
+            _serviceProvider = serviceProvider;
             PrinterConfigurationManagerService = printerConfigurationManagerService;
             ValidationContext = new ValidationContext();
 
@@ -41,7 +46,7 @@ namespace MarlinToolset.ViewModels
 
         private void OnAdd()
         {
-            var printerConfigurationView = new PrinterConfigurationView();
+            var printerConfigurationView = _serviceProvider.GetService<PrinterConfigurationView>();
             printerConfigurationView.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             var result = printerConfigurationView.ShowDialog();
             if (result.HasValue && result.Value)

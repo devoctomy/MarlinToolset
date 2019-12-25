@@ -11,12 +11,15 @@ namespace MarlinToolset.Views
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IPrinterConfigurationManagerService _printerConfigurationManagerService;
-        public PrintersConfigurationView(IServiceProvider serviceProvider)
+        public PrintersConfigurationView(
+            IServiceProvider serviceProvider,
+            IPrinterConfigurationManagerService printerConfigurationManagerService)
         {
             InitializeComponent();
+
             _serviceProvider = serviceProvider;
-            _printerConfigurationManagerService = _serviceProvider.GetService<IPrinterConfigurationManagerService>();
-            ViewModel = new PrintersConfigurationViewModel(_printerConfigurationManagerService);
+            _printerConfigurationManagerService = printerConfigurationManagerService;
+            ViewModel = _serviceProvider.GetService<PrintersConfigurationViewModel>();
             ViewModel.Saved += ViewModel_Saved;
             ViewModel.Cancelled += ViewModel_Cancelled;
 
