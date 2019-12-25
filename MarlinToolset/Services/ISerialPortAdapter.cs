@@ -24,5 +24,7 @@ namespace MarlinToolset.Services
             byte[] data,
             int offset,
             int count);
+
+        ISerialPort GetSerialPort(SerialPortAdapterRef portRef);
     }
 }

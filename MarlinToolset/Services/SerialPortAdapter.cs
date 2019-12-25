@@ -2,19 +2,33 @@
 using System;
 using System.Collections.Concurrent;
 using System.IO.Ports;
+using System.Linq;
 using System.Text;
 
 namespace MarlinToolset.Services
 {
-    public class SerialPortAdapter : ISerialPortAdapter
+    public class SerialPortAdapter<SerialPortType> : ISerialPortAdapter, IDisposable where SerialPortType : ISerialPort
     {
-        private ConcurrentDictionary<SerialPortAdapterRef, SerialPort> _portsByRef;
-        private ConcurrentDictionary<SerialPort, SerialPortAdapterRef> _refsByPort;
+        private ConcurrentDictionary<SerialPortAdapterRef, ISerialPort> _portsByRef;
+        private ConcurrentDictionary<ISerialPort, SerialPortAdapterRef> _refsByPort;
+        private bool _disposed;
 
         public SerialPortAdapter()
         {
-            _portsByRef = new ConcurrentDictionary<SerialPortAdapterRef, SerialPort>();
-            _refsByPort = new ConcurrentDictionary<SerialPort, SerialPortAdapterRef>();
+            _portsByRef = new ConcurrentDictionary<SerialPortAdapterRef, ISerialPort>();
+            _refsByPort = new ConcurrentDictionary<ISerialPort, SerialPortAdapterRef>();
+        }
+
+        public ISerialPort GetSerialPort(SerialPortAdapterRef portRef)
+        {
+            if (_portsByRef.TryGetValue(portRef, out var serialPort))
+            {
+                return serialPort;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public SerialPortAdapterRef Connect(
@@ -25,7 +39,7 @@ namespace MarlinToolset.Services
                 config,
                 dataReceivedCallback);
 
-            var serialPort = new SerialPort(
+            var serialPort = (SerialPortType)Activator.CreateInstance(typeof(SerialPortType),
                 config.Port,
                 config.BaudRate);
             serialPort.DataReceived += SerialPort_DataReceived;
@@ -45,11 +59,19 @@ namespace MarlinToolset.Services
 
                 _portsByRef.TryRemove(portRef, out var removedPort);
                 _refsByPort.TryRemove(serialPort, out var removedRef);
+
+                serialPort.Dispose();
             }
             else
             {
                 //throw exception
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public void Write(
@@ -89,7 +111,7 @@ namespace MarlinToolset.Services
             object sender,
             SerialDataReceivedEventArgs e)
         {
-            if (_refsByPort.TryGetValue((SerialPort)sender, out var portRef))
+            if (_refsByPort.TryGetValue((SerialPortType)sender, out var portRef))
             {
                 var serialPort = (SerialPort)sender;
                 portRef.DataReceivedCallback(
@@ -100,6 +122,31 @@ namespace MarlinToolset.Services
             {
 
             }
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if (disposing)
+            {
+                while (_portsByRef.Count > 0)
+                {
+                    var portRef = _portsByRef.Keys.First();
+                    if (_portsByRef.TryRemove(portRef, out var removedPort))
+                    {
+                        removedPort.Dispose();
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Failed to remove port whilst disposing adapter.");
+                    }
+                }
+                _portsByRef.Clear();
+                _refsByPort.Clear();
+            }
+
+            _disposed = true;
         }
 
     }

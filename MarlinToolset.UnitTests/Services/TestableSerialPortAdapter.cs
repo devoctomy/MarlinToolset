@@ -14,6 +14,11 @@ namespace MarlinToolset.UnitTests.Services
         public Action<SerialPortAdapterRef, string> Callback { get; private set; }
         public SerialPortAdapterRef SerialPortAdapterRef { get; private set; }
 
+        public ISerialPort GetSerialPort(SerialPortAdapterRef portRef)
+        {
+            return null;
+        }
+
         public SerialPortAdapterRef Connect(
             PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCallback)
