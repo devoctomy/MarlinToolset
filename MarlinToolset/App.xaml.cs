@@ -8,9 +8,11 @@ using System;
 using MarlinToolset.Views;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using MarlinToolset.ViewModels;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MarlinToolset
 {
+    [ExcludeFromCodeCoverage]
     public partial class App : Application
     {
         public static IServiceProvider ServiceProvider { get; private set; }

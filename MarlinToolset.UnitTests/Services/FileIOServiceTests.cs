@@ -90,5 +90,40 @@ namespace MarlinToolset.UnitTests.Services
             Assert.Equal(contents, result);
         }
 
+        [Fact]
+        public void GivenPath_AndPathExists_WhenExists_ThenTrueReturned()
+        {
+            // Arrange
+            var id = Guid.NewGuid().ToString();
+            var path = $"{id}.txt";
+            var contents = id;
+            File.WriteAllText(
+                path,
+                contents);
+            _tempFiles.Add(path);
+            var sut = new FileIOService();
+
+            // Act
+            var exists = sut.Exists(path);
+
+            // Assert
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public void GivenPath_AndPathNotExists_WhenExists_ThenFalseReturned()
+        {
+            // Arrange
+            var id = Guid.NewGuid().ToString();
+            var path = $"{id}.txt";
+            var sut = new FileIOService();
+
+            // Act
+            var exists = sut.Exists(path);
+
+            // Assert
+            Assert.False(exists);
+        }
+
     }
 }
