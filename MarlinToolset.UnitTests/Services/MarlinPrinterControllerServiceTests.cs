@@ -120,7 +120,6 @@ namespace MarlinToolset.UnitTests.Services
             var sut = new MarlinPrinterControllerService(testableSerialPortAdapter);
             var expectedDataString = "Hello World!";
             var expecetdDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
-            var expectedEncoding = Encoding.ASCII;
             var expectedOffset = 1;
             var expectedCount = 2;
             sut.Connect(printer);

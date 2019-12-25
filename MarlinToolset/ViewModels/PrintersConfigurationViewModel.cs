@@ -27,7 +27,7 @@ namespace MarlinToolset.ViewModels
         public PrinterConfigurationModel SelectedPrinter { get; set; }
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
 
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public PrintersConfigurationViewModel(
             IServiceProvider serviceProvider,

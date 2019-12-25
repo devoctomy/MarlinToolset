@@ -6,7 +6,7 @@ namespace MarlinToolset.UnitTests.Services
 {
     public class SerialPortAdapterWriteBinaryData
     {
-        public byte[] Data { get; set; }
+        public IList<byte> Data { get; set; }
         public int Offset { get; set; }
         public int Count { get; set; }
     }

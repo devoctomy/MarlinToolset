@@ -13,6 +13,8 @@ namespace MarlinToolset.UnitTests.Services
         public bool Disposed { get; private set; }
         public Action<byte[], int, int> WriteCallback { get; set; }
 
+        private bool _disposed;
+
         public TestableSerialPort(
             string portName,
             int baudRate)
@@ -21,14 +23,32 @@ namespace MarlinToolset.UnitTests.Services
             BaudRate = baudRate;
         }
 
-        public void Close()
+        ~TestableSerialPort()
         {
-            IsOpen = false;
+            Dispose(false);
         }
 
         public void Dispose()
         {
-            Disposed = true;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if(disposing)
+            {
+                Disposed = true;
+            }
+
+            _disposed = true;
+        }
+
+        public void Close()
+        {
+            IsOpen = false;
         }
 
         public void Open()

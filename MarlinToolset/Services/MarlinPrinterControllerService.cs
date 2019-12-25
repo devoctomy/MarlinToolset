@@ -12,7 +12,7 @@ namespace MarlinToolset.Services
         public SerialPortAdapterRef SerialPortAdapterRef { get; private set; }
         public bool IsConnected => (Printer != null);
 
-        private ISerialPortAdapter _serialPortAdapter;
+        private readonly ISerialPortAdapter _serialPortAdapter;
 
         public MarlinPrinterControllerService(ISerialPortAdapter serialPortAdapter)
         {

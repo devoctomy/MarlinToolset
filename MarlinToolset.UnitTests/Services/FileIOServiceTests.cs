@@ -8,22 +8,41 @@ namespace MarlinToolset.UnitTests.Services
 {
     public class FileIOServiceTests : IDisposable
     {
-        private List<string> _tempFiles;
+        private readonly List<string> _tempFiles;
+        private bool _disposed;
 
         public FileIOServiceTests()
         {
             _tempFiles = new List<string>();
         }
 
+        ~FileIOServiceTests()
+        {
+            Dispose(false);
+        }
+
         public void Dispose()
         {
-            foreach(string curTempFile in _tempFiles)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+
+            if(disposing)
             {
-                if(File.Exists(curTempFile))
+                foreach (string curTempFile in _tempFiles)
                 {
-                    File.Delete(curTempFile);
+                    if (File.Exists(curTempFile))
+                    {
+                        File.Delete(curTempFile);
+                    }
                 }
             }
+
+            _disposed = true;
         }
 
         [Fact]

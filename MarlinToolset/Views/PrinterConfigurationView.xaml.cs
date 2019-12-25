@@ -8,7 +8,7 @@ namespace MarlinToolset.Views
 {
     public partial class PrinterConfigurationView : ReactiveWindow<PrinterConfigurationViewModel>
     {
-        private IServiceProvider _serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public PrinterConfigurationView(IServiceProvider serviceProvider)
         {

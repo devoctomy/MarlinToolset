@@ -10,15 +10,11 @@ namespace MarlinToolset.Views
     public partial class PrintersConfigurationView : ReactiveWindow<PrintersConfigurationViewModel>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IPrinterConfigurationManagerService _printerConfigurationManagerService;
-        public PrintersConfigurationView(
-            IServiceProvider serviceProvider,
-            IPrinterConfigurationManagerService printerConfigurationManagerService)
+        public PrintersConfigurationView(IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
             _serviceProvider = serviceProvider;
-            _printerConfigurationManagerService = printerConfigurationManagerService;
             ViewModel = _serviceProvider.GetService<PrintersConfigurationViewModel>();
             ViewModel.Saved += ViewModel_Saved;
             ViewModel.Cancelled += ViewModel_Cancelled;

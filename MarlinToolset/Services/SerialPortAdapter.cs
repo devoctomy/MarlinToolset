@@ -12,8 +12,8 @@ namespace MarlinToolset.Services
     {
         public IReadOnlyList<SerialPortAdapterRef> PortRefs => _portsByRef.Keys.ToList();
 
-        private ConcurrentDictionary<SerialPortAdapterRef, ISerialPort> _portsByRef;
-        private ConcurrentDictionary<ISerialPort, SerialPortAdapterRef> _refsByPort;
+        private readonly ConcurrentDictionary<SerialPortAdapterRef, ISerialPort> _portsByRef;
+        private readonly ConcurrentDictionary<ISerialPort, SerialPortAdapterRef> _refsByPort;
         private bool _disposed;
 
         public SerialPortAdapter()
@@ -53,7 +53,7 @@ namespace MarlinToolset.Services
             return portRef;
         }
 
-        public void Disconnect(SerialPortAdapterRef portRef)
+        public bool Disconnect(SerialPortAdapterRef portRef)
         {
             if(_portsByRef.ContainsKey(portRef))
             {
@@ -64,10 +64,11 @@ namespace MarlinToolset.Services
                 _refsByPort.TryRemove(serialPort, out var removedRef);
 
                 serialPort.Dispose();
+                return true;
             }
             else
             {
-                //throw exception
+                return false;
             }
         }
 
@@ -77,20 +78,20 @@ namespace MarlinToolset.Services
             GC.SuppressFinalize(this);
         }
 
-        public void Write(
+        public bool Write(
             SerialPortAdapterRef portRef,
             string data,
             Encoding encoding)
         {
             var bytes = encoding.GetBytes(data);
-            Write(
+            return Write(
                 portRef,
                 bytes,
                 0,
                 bytes.Length);
         }
 
-        public void Write(
+        public bool Write(
             SerialPortAdapterRef portRef,
             byte[] data,
             int offset,
@@ -103,10 +104,11 @@ namespace MarlinToolset.Services
                     data,
                     offset,
                     count);
+                return true;
             }
             else
             {
-                //throw exception
+                return false;
             }
         }
 
@@ -127,7 +129,7 @@ namespace MarlinToolset.Services
             }
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (_disposed) return;
 
@@ -139,10 +141,6 @@ namespace MarlinToolset.Services
                     if (_portsByRef.TryRemove(portRef, out var removedPort))
                     {
                         removedPort.Dispose();
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Failed to remove port whilst disposing adapter.");
                     }
                 }
                 _portsByRef.Clear();

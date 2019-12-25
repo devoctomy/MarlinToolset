@@ -14,14 +14,14 @@ namespace MarlinToolset.Services
             PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCallback);
 
-        void Disconnect(SerialPortAdapterRef portRef);
+        bool Disconnect(SerialPortAdapterRef portRef);
 
-        void Write(
+        bool Write(
             SerialPortAdapterRef portRef,
             string data,
             Encoding encoding);
 
-        void Write(
+        bool Write(
             SerialPortAdapterRef portRef,
             byte[] data,
             int offset,

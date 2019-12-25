@@ -34,17 +34,22 @@ namespace MarlinToolset.UnitTests.Services
             return SerialPortAdapterRef;
         }
 
-        public void Disconnect(SerialPortAdapterRef portRef)
+        public bool Disconnect(SerialPortAdapterRef portRef)
         {
             if(portRef == SerialPortAdapterRef)
             {
                 Config = null;
                 Callback = null;
                 SerialPortAdapterRef = null;
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public void Write(
+        public bool Write(
             SerialPortAdapterRef portRef,
             string data,
             Encoding encoding)
@@ -56,10 +61,16 @@ namespace MarlinToolset.UnitTests.Services
                     Data = data,
                     Encoding = encoding
                 });
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
-        public void Write(
+        public bool Write(
             SerialPortAdapterRef portRef,
             byte[] data,
             int offset,
@@ -73,6 +84,12 @@ namespace MarlinToolset.UnitTests.Services
                     Offset = offset,
                     Count = count
                 });
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

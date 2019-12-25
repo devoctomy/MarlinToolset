@@ -10,10 +10,7 @@ namespace MarlinToolset
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
 
-        public MainWindow(
-            IServiceProvider serviceProvider,
-            IPrinterConfigurationManagerService printerConfigurationManagerService,
-            IPrinterControllerService printerControllerService)
+        public MainWindow(IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
