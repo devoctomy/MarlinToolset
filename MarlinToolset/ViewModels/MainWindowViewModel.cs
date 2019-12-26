@@ -9,6 +9,10 @@ using ReactiveUI.Validation.Abstractions;
 using MarlinToolset.Model;
 using System.Windows;
 using System.Linq;
+using System.Collections.ObjectModel;
+using System.Windows.Threading;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MarlinToolset.ViewModels
 {
@@ -18,8 +22,11 @@ namespace MarlinToolset.ViewModels
         public ReactiveCommand<Unit, Unit> ConfigurePrinters { get; }
         public ReactiveCommand<Unit, Unit> ConnectToggle { get; }
         public PrinterConfigurationModel SelectedPrinter { get; set; }
+        public ListBox TerminalListBox { get; set; }
         public bool IsConnected { get; private set; }
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
+
+        public ObservableCollection<string> TerminalLines { get; }
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IPrinterControllerService _printerControllerService;
@@ -38,13 +45,26 @@ namespace MarlinToolset.ViewModels
 
             ConfigurePrinters = ReactiveCommand.Create(new Action(OnConfigurePrinters));
             ConnectToggle = ReactiveCommand.Create(new Action(OnConnectToggle));
+            TerminalLines = new ObservableCollection<string>();
         }
 
         private void PrinterControllerService_ReceivedData(
             object sender,
             PrinterControllerReceivedDataEventArgs e)
         {
-            // output the data to the screen
+            foreach(var curLine in e.Lines)
+            {
+                TerminalListBox.Dispatcher.Invoke(() =>
+                {
+                    TerminalLines.Add(curLine);
+
+                    Border border = (Border)VisualTreeHelper.GetChild(TerminalListBox, 0);
+                    ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                    scrollViewer.ScrollToBottom();
+                    //TerminalListBox.SelectedIndex = TerminalListBox.Items.Count - 1;
+                    //TerminalListBox.ScrollIntoView(TerminalListBox.SelectedItem);
+                });
+            }
         }
 
         private void OnConfigurePrinters()

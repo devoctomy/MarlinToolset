@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MarlinToolset.Services
 {
     public class PrinterControllerReceivedDataEventArgs : EventArgs
     {
-        public string Data { get; set; }
+        public IList<string> Lines { get; set; }
     }
 }

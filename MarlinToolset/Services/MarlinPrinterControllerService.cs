@@ -1,5 +1,6 @@
 ﻿using MarlinToolset.Model;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace MarlinToolset.Services
@@ -44,7 +45,8 @@ namespace MarlinToolset.Services
             SerialPortAdapterRef portRef,
             string data)
         {
-            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Data = data });
+            var lines = data.Split('\n').Select(x => x.StartsWith("echo:") ? x.Replace("echo:", string.Empty) : x);
+            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Lines = lines.ToList() });
         }
 
         public void Write(

@@ -24,7 +24,13 @@ namespace MarlinToolset.Services
             InnerPort = new SerialPort(
                 portName,
                 baudRate);
-            InnerPort.DataReceived += DataReceived;
+            InnerPort.DataReceived += InnerPort_DataReceived;
+        }
+
+        [ExcludeFromCodeCoverage]
+        private void InnerPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            DataReceived?.Invoke(this, e);
         }
 
         [ExcludeFromCodeCoverage]

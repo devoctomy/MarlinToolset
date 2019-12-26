@@ -11,7 +11,7 @@
                            Title="Marlin Toolset"
                            Height="450"
                            Width="800">
-    <DockPanel>
+    <DockPanel LastChildFill="True">
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
                 <ComboBox x:Name="PrintersComboBox"
@@ -36,5 +36,27 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="128"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Background="Blue"
+                  Margin="0,0,0,8">
+
+            </Grid>
+            <GridSplitter Height="8" 
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Bottom" 
+                          ResizeBehavior="CurrentAndNext"></GridSplitter>
+            <Grid Grid.Row="1">
+                <ListBox x:Name="TerminalListBox"
+                         DisplayMemberPath="."
+                         Background="Black"
+                         Foreground="Green"
+                         FontFamily="Courier New">
+                </ListBox>
+            </Grid>
+        </Grid>
     </DockPanel>
 </reactiveui:ReactiveWindow>

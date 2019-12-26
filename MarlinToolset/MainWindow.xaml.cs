@@ -39,6 +39,15 @@ namespace MarlinToolset
                     viewModel => viewModel.ConnectToggle,
                     view => view.ConnectToggleButton)
                 .DisposeWith(disposableRegistration);
+
+                this.OneWayBind(ViewModel,
+                    viewModel => viewModel.TerminalLines,
+                    view => view.TerminalListBox.ItemsSource)
+                .DisposeWith(disposableRegistration);
+
+
+                ViewModel.TerminalListBox = TerminalListBox;
+                //ViewModel.ViewDispatcher = Dispatcher;
             });
         }
     }
