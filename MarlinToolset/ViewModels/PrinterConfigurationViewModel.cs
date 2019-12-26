@@ -17,7 +17,7 @@ namespace MarlinToolset.ViewModels
 
         public ValidationContext ValidationContext { get; }
 
-        public PrinterConfigurationModel Model { get; private set; }
+        public PrinterConfigurationModel Model { get; set; }
 
         public IEnumerable<string> AvailableSerialPorts => SerialPort.GetPortNames();
 

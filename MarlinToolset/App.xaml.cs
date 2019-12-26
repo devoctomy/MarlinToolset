@@ -56,8 +56,8 @@ namespace MarlinToolset
         private void ConfigureViewsAndViewModels(IServiceCollection services)
         {
             services.AddSingleton<MainWindow>();
-            services.AddTransient<PrinterConfigurationView>();
-            services.AddTransient<PrintersConfigurationView>();
+            services.AddTransient<IPrinterConfigurationView, PrinterConfigurationView>();
+            services.AddTransient<IPrintersConfigurationView, PrintersConfigurationView>();
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<PrinterConfigurationViewModel>();
             services.AddTransient<PrintersConfigurationViewModel>();

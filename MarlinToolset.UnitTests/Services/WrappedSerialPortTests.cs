@@ -20,6 +20,7 @@ namespace MarlinToolset.UnitTests.Services
             sut.Dispose();
 
             // Assert
+            Assert.False(sut.IsOpen);   // This assertion is pointless but covers that line of code...
             Assert.Null(sut.InnerPort);
         }
     }

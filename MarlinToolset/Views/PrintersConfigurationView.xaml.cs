@@ -7,7 +7,7 @@ using System.Reactive.Disposables;
 
 namespace MarlinToolset.Views
 {
-    public partial class PrintersConfigurationView : ReactiveWindow<PrintersConfigurationViewModel>
+    public partial class PrintersConfigurationView : ReactiveWindow<PrintersConfigurationViewModel>, IPrintersConfigurationView
     {
         private readonly IServiceProvider _serviceProvider;
         public PrintersConfigurationView(IServiceProvider serviceProvider)

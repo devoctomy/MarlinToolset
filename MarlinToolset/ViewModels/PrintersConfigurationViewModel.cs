@@ -46,8 +46,8 @@ namespace MarlinToolset.ViewModels
 
         private void OnAdd()
         {
-            var printerConfigurationView = _serviceProvider.GetService<PrinterConfigurationView>();
-            printerConfigurationView.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            var printerConfigurationView = _serviceProvider.GetService<IPrinterConfigurationView>();
+            printerConfigurationView.Owner = Application.Current?.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             var result = printerConfigurationView.ShowDialog();
             if (result.HasValue && result.Value)
             {
@@ -59,8 +59,9 @@ namespace MarlinToolset.ViewModels
         {
             if (SelectedPrinter != null)
             {
-                if(MessageBox.Show(
-                    Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive),
+                var activeWindow = Application.Current?.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+                if (activeWindow == null || MessageBox.Show(
+                    activeWindow,
                     $"Are you sure you want to remove the printer '{SelectedPrinter.Name}'?",
                     "Remove Printer",
                     MessageBoxButton.YesNo,
