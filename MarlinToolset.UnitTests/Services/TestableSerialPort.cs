@@ -14,6 +14,7 @@ namespace MarlinToolset.UnitTests.Services
         public Action<byte[], int, int> WriteCallback { get; set; }
 
         private bool _disposed;
+        private string _pendingData = string.Empty;
 
         public TestableSerialPort(
             string portName,
@@ -58,7 +59,9 @@ namespace MarlinToolset.UnitTests.Services
 
         public string ReadExisting()
         {
-            return string.Empty;
+            var existing = _pendingData;
+            _pendingData = string.Empty;
+            return existing;
         }
 
         public void Write(
@@ -70,6 +73,14 @@ namespace MarlinToolset.UnitTests.Services
                 data,
                 offset,
                 count);
+        }
+
+        public void FakeReceiveData(string data)
+        {
+            _pendingData += data;
+            DataReceived?.Invoke(
+                this,
+                null);
         }
     }
 }

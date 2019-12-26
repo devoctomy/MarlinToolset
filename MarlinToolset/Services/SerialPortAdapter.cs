@@ -118,7 +118,7 @@ namespace MarlinToolset.Services
         {
             if (_refsByPort.TryGetValue((SerialPortType)sender, out var portRef))
             {
-                var serialPort = (SerialPort)sender;
+                var serialPort = (ISerialPort)sender;
                 portRef.DataReceivedCallback(
                     portRef,
                     serialPort.ReadExisting());

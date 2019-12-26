@@ -284,5 +284,33 @@ namespace MarlinToolset.UnitTests.Services
             Assert.Empty(sut.PortRefs);
             Assert.True(port.Disposed);
         }
+
+        [Fact]
+        public void GivenConnected_AndString_WhenFakeReceiveData_ThenCallbackInvoked()
+        {
+            // Arrange
+            var config = new PrinterConfigurationModel()
+            {
+                Port = "com9",
+                BaudRate = 1001
+            };
+            var expectedDataReceived = "Hello World!";
+            var actualDataReceived = string.Empty;
+            Action<SerialPortAdapterRef, string> callback = delegate (SerialPortAdapterRef portRef, string data)
+            {
+                actualDataReceived = data;
+            };
+            var sut = new SerialPortAdapter<TestableSerialPort>();
+            var portRef = sut.Connect(
+                config,
+                callback);
+            var port = (TestableSerialPort)sut.GetSerialPort(portRef);
+
+            // Act
+            port.FakeReceiveData(expectedDataReceived);
+
+            // Assert
+            Assert.Equal(expectedDataReceived, actualDataReceived);
+        }
     }
 }
