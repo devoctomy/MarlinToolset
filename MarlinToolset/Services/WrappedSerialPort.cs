@@ -8,6 +8,7 @@ namespace MarlinToolset.Services
     {
         public event SerialDataReceivedEventHandler DataReceived;
 
+        [ExcludeFromCodeCoverage]
         public bool IsOpen { get; private set; }
         public string PortName { get; private set; }
         public int BaudRate { get; private set; }
@@ -27,6 +28,7 @@ namespace MarlinToolset.Services
             InnerPort.DataReceived += DataReceived;
         }
 
+        [ExcludeFromCodeCoverage]
         ~WrappedSerialPort()
         {
             Dispose(false);
