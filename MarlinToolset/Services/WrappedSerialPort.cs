@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Ports;
 
 namespace MarlinToolset.Services
@@ -10,8 +11,8 @@ namespace MarlinToolset.Services
         public bool IsOpen { get; private set; }
         public string PortName { get; private set; }
         public int BaudRate { get; private set; }
+        public SerialPort InnerPort { get; private set; }
 
-        private SerialPort _serialPort;
         private bool _disposed;
 
         public WrappedSerialPort(
@@ -20,10 +21,10 @@ namespace MarlinToolset.Services
         {
             PortName = portName;
             BaudRate = baudRate;
-            _serialPort = new SerialPort(
+            InnerPort = new SerialPort(
                 portName,
                 baudRate);
-            _serialPort.DataReceived += DataReceived;
+            InnerPort.DataReceived += DataReceived;
         }
 
         ~WrappedSerialPort()
@@ -31,9 +32,10 @@ namespace MarlinToolset.Services
             Dispose(false);
         }
 
+        [ExcludeFromCodeCoverage]
         public void Close()
         {
-            _serialPort.Close();
+            InnerPort.Close();
             IsOpen = false;
         }
 
@@ -49,33 +51,36 @@ namespace MarlinToolset.Services
 
             if(disposing)
             {
-                if(_serialPort != null)
+                if(InnerPort != null)
                 {
-                    _serialPort.Dispose();
-                    _serialPort = null;
+                    InnerPort.Dispose();
+                    InnerPort = null;
                 }
             }
 
             _disposed = true;
         }
 
+        [ExcludeFromCodeCoverage]
         public void Open()
         {
-            _serialPort.Open();
+            InnerPort.Open();
             IsOpen = true;
         }
 
+        [ExcludeFromCodeCoverage]
         public string ReadExisting()
         {
-            return _serialPort.ReadExisting();
+            return InnerPort.ReadExisting();
         }
 
+        [ExcludeFromCodeCoverage]
         public void Write(
             byte[] data,
             int offset,
             int count)
         {
-            _serialPort.Write(
+            InnerPort.Write(
                 data,
                 offset,
                 count);

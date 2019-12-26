@@ -59,9 +59,8 @@ namespace MarlinToolset.Services
             {
                 var serialPort = _portsByRef[portRef];
                 serialPort.Close();
-
-                _portsByRef.TryRemove(portRef, out var removedPort);
-                _refsByPort.TryRemove(serialPort, out var removedRef);
+                _portsByRef.TryRemove(portRef, out _);
+                _refsByPort.TryRemove(serialPort, out _);
 
                 serialPort.Dispose();
                 return true;

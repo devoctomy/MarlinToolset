@@ -210,7 +210,7 @@ namespace MarlinToolset.UnitTests.Services
                 0);
 
             // Assert
-            Assert.False(false);
+            Assert.False(result);
         }
 
         [Fact]
