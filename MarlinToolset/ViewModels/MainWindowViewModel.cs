@@ -50,7 +50,7 @@ namespace MarlinToolset.ViewModels
         private void OnConfigurePrinters()
         {
             var printersConfigurationView = _serviceProvider.GetService<IPrintersConfigurationView>();
-            printersConfigurationView.Owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            printersConfigurationView.Owner = Application.Current?.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
             var result = printersConfigurationView.ShowDialog();
             if (result.HasValue && result.Value)
             {

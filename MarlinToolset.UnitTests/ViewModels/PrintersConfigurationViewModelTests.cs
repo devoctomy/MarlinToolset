@@ -154,9 +154,10 @@ namespace MarlinToolset.UnitTests.ViewModels
             var printer = new PrinterConfigurationModel();
             var sut = new PrintersConfigurationViewModel(
                 null,
-                _mockPrinterConfigurationManagerService.Object);
-
-            sut.SelectedPrinter = printer;
+                _mockPrinterConfigurationManagerService.Object)
+            {
+                SelectedPrinter = printer
+            };
 
             // Act
             sut.Remove.Execute().Subscribe();
