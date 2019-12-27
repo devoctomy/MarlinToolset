@@ -120,5 +120,47 @@ namespace MarlinToolset.UnitTests.ViewModels
             _mockPrinterControllerSevice.Verify(x => x.Connect(
                 It.Is<PrinterConfigurationModel>(x => x == sut.SelectedPrinter)), Times.Once);
         }
+
+        [StaFact]
+        public void GivenPrinterControllerReceivedDataEventArgs_WhenEventHandled_ThenPacketAddedToList()
+        {
+            // Arrange
+            var mockPrintersConfigurationView = new Mock<IPrintersConfigurationView>();
+            var sut = new MainWindowViewModel(
+                _mockServiceProvider.Object,
+                _mockPrinterConfigurationManagerService.Object,
+                _mockPrinterControllerSevice.Object)
+            {
+                SelectedPrinter = new PrinterConfigurationModel()
+            };
+            sut.TerminalListBox = new System.Windows.Controls.ListBox();
+
+            var packets = new PrinterControllerReceivedDataEventArgs[]
+            {
+                new PrinterControllerReceivedDataEventArgs()
+                {
+                    Packet = new PrinterPacket()
+                },
+                new PrinterControllerReceivedDataEventArgs()
+                {
+                    Packet = new PrinterPacket()
+                },
+                new PrinterControllerReceivedDataEventArgs()
+                {
+                    Packet = new PrinterPacket()
+                }
+            };
+
+            // Act
+            foreach(var curPacket in packets)
+            {
+                _mockPrinterControllerSevice.Raise(
+                    x => x.ReceivedData += null,
+                    curPacket);
+            }
+
+            // Assert
+            Equals(3, sut.Packets.Count);
+        }
     }
 }

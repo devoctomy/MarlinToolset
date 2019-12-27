@@ -55,8 +55,7 @@ namespace MarlinToolset.ViewModels
             TerminalListBox.Dispatcher.Invoke(() =>
             {
                 Packets.Add(e.Packet);
-
-                if(TerminalListBox != null)
+                if(VisualTreeHelper.GetChildrenCount(TerminalListBox) > 0)
                 {
                     Border border = (Border)VisualTreeHelper.GetChild(TerminalListBox, 0);
                     ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
