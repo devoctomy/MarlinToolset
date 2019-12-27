@@ -56,11 +56,12 @@ namespace MarlinToolset.ViewModels
             {
                 Packets.Add(e.Packet);
 
-                Border border = (Border)VisualTreeHelper.GetChild(TerminalListBox, 0);
-                ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-                scrollViewer.ScrollToBottom();
-                //TerminalListBox.SelectedIndex = TerminalListBox.Items.Count - 1;
-                //TerminalListBox.ScrollIntoView(TerminalListBox.SelectedItem);
+                if(TerminalListBox != null)
+                {
+                    Border border = (Border)VisualTreeHelper.GetChild(TerminalListBox, 0);
+                    ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                    scrollViewer.ScrollToBottom();
+                }
             });
         }
 

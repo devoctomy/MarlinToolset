@@ -3,9 +3,11 @@ using MarlinToolset.ViewModels;
 using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MarlinToolset.Views
 {
+    [ExcludeFromCodeCoverage]
     public partial class PrinterConfigurationView : ReactiveWindow<PrinterConfigurationViewModel>, IPrinterConfigurationView
     {
         private readonly IServiceProvider _serviceProvider;

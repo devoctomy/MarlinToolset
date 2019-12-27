@@ -4,9 +4,11 @@ using System;
 using ReactiveUI;
 using MarlinToolset.ViewModels;
 using System.Reactive.Disposables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MarlinToolset
 {
+    [ExcludeFromCodeCoverage]
     public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
 
@@ -47,7 +49,6 @@ namespace MarlinToolset
 
 
                 ViewModel.TerminalListBox = TerminalListBox;
-                //ViewModel.ViewDispatcher = Dispatcher;
             });
         }
     }
