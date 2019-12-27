@@ -51,7 +51,7 @@
                           ResizeBehavior="CurrentAndNext"></GridSplitter>
             <Grid Grid.Row="1">
                 <ListBox x:Name="TerminalListBox"
-                         DisplayMemberPath="."
+                         DisplayMemberPath="PreProcessedData"
                          Background="Black"
                          Foreground="Green"
                          FontFamily="Courier New">

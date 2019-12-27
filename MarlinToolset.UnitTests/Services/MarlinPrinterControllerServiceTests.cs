@@ -21,13 +21,16 @@ namespace MarlinToolset.UnitTests.Services
                 BaudRate = 1001
             };
             var mockSerialPortAdapter = new Mock<ISerialPortAdapter>();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
 
             mockSerialPortAdapter.Setup(x => x.Connect(
                 It.IsAny<PrinterConfigurationModel>(),
                 It.IsAny<Action<SerialPortAdapterRef, string>>()))
                 .Returns(new SerialPortAdapterRef(printer, null));
 
-            var sut = new MarlinPrinterControllerService(mockSerialPortAdapter.Object);
+            var sut = new MarlinPrinterControllerService(
+                mockSerialPortAdapter.Object,
+                mockPrinterPacketParser.Object);
 
             // Act
             sut.Connect(printer);
@@ -46,13 +49,16 @@ namespace MarlinToolset.UnitTests.Services
             // Arrange
             var printer = new PrinterConfigurationModel();
             var mockSerialPortAdapter = new Mock<ISerialPortAdapter>();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
 
             mockSerialPortAdapter.Setup(x => x.Connect(
                 It.IsAny<PrinterConfigurationModel>(),
                 It.IsAny<Action<SerialPortAdapterRef, string>>()))
                 .Returns(new SerialPortAdapterRef(printer, null));
 
-            var sut = new MarlinPrinterControllerService(mockSerialPortAdapter.Object);
+            var sut = new MarlinPrinterControllerService(
+                mockSerialPortAdapter.Object,
+                mockPrinterPacketParser.Object);
             sut.Connect(printer);
 
             // Act
@@ -71,15 +77,33 @@ namespace MarlinToolset.UnitTests.Services
             // Arrange
             var printer = new PrinterConfigurationModel();
             var testableSerialPortAdapter = new TestableSerialPortAdapter();
-            var sut = new MarlinPrinterControllerService(testableSerialPortAdapter);
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
             var receivedData = string.Empty;
             var expecetdData = "Hello World!";
             sut.Connect(printer);
 
+            mockPrinterPacketParser.Setup(x => x.ReceiveData(
+                It.IsAny<string>())).Callback((string data) =>
+                {
+                    var eventArgs = new PrinterPacketParserPacketCompleteEventArgs()
+                    {
+                        Packet = new PrinterPacket()
+                        {
+                            RawData = data
+                        }
+                    };
+                    mockPrinterPacketParser.Raise(
+                        x => x.PacketComplete += null,
+                        eventArgs);
+                });
+
             // Act
             sut.ReceivedData += new EventHandler<PrinterControllerReceivedDataEventArgs>(delegate (object s, PrinterControllerReceivedDataEventArgs ev)
             {
-                receivedData = ev.Data;
+                receivedData = ev.Packet.RawData;
             });
             testableSerialPortAdapter.FakeReceiveData(
                 testableSerialPortAdapter.SerialPortAdapterRef,
@@ -95,7 +119,10 @@ namespace MarlinToolset.UnitTests.Services
             // Arrange
             var printer = new PrinterConfigurationModel();
             var testableSerialPortAdapter = new TestableSerialPortAdapter();
-            var sut = new MarlinPrinterControllerService(testableSerialPortAdapter);
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
             var expecetdData = "Hello World!";
             var expectedEncoding = Encoding.ASCII;
             sut.Connect(printer);
@@ -116,8 +143,11 @@ namespace MarlinToolset.UnitTests.Services
         {
             // Arrange
             var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
             var testableSerialPortAdapter = new TestableSerialPortAdapter();
-            var sut = new MarlinPrinterControllerService(testableSerialPortAdapter);
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
             var expectedDataString = "Hello World!";
             var expecetdDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
             var expectedOffset = 1;

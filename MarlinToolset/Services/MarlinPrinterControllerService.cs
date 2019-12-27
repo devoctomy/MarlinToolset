@@ -14,10 +14,21 @@ namespace MarlinToolset.Services
         public bool IsConnected => (Printer != null);
 
         private readonly ISerialPortAdapter _serialPortAdapter;
+        private readonly IPrinterPacketParser _printerPacketParser;
 
-        public MarlinPrinterControllerService(ISerialPortAdapter serialPortAdapter)
+        public MarlinPrinterControllerService(
+            ISerialPortAdapter serialPortAdapter,
+            IPrinterPacketParser printerPacketParser)
         {
             _serialPortAdapter = serialPortAdapter;
+            _printerPacketParser = printerPacketParser;
+
+            _printerPacketParser.PacketComplete += PacketParser_PacketComplete;
+        }
+
+        private void PacketParser_PacketComplete(object sender, PrinterPacketParserPacketCompleteEventArgs e)
+        {
+            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Packet = e.Packet });
         }
 
         public void Connect(PrinterConfigurationModel printer)
@@ -45,8 +56,7 @@ namespace MarlinToolset.Services
             SerialPortAdapterRef portRef,
             string data)
         {
-            var lines = data.Split('\n').Select(x => x.StartsWith("echo:") ? x.Replace("echo:", string.Empty) : x);
-            ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Lines = lines.ToList() });
+            _printerPacketParser.ReceiveData(data);
         }
 
         public void Write(

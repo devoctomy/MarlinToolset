@@ -41,7 +41,7 @@ namespace MarlinToolset
                 .DisposeWith(disposableRegistration);
 
                 this.OneWayBind(ViewModel,
-                    viewModel => viewModel.TerminalLines,
+                    viewModel => viewModel.Packets,
                     view => view.TerminalListBox.ItemsSource)
                 .DisposeWith(disposableRegistration);
 

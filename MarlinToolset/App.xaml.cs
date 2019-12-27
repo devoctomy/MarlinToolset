@@ -50,6 +50,14 @@ namespace MarlinToolset
             services.AddTransient<PrinterConfigurationView>();
             services.AddTransient<PrintersConfigurationView>();
             services.AddScoped<IPrinterControllerService, MarlinPrinterControllerService>();
+            services.AddScoped<IPrinterPacketParser, MarlinPrinterPacketParser>(x =>
+            {
+                var options = new MarlinPrinterPacketParserOptions()
+                {
+                };
+
+                return new MarlinPrinterPacketParser(options);
+            });
             services.AddSingleton<ISerialPortAdapter, SerialPortAdapter<WrappedSerialPort>>();
         }
 

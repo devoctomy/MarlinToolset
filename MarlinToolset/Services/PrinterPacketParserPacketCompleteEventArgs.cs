@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace MarlinToolset.Services
 {
-    public class PrinterControllerReceivedDataEventArgs : EventArgs
+    public class PrinterPacketParserPacketCompleteEventArgs : EventArgs
     {
         public PrinterPacket Packet { get; set; }
     }
