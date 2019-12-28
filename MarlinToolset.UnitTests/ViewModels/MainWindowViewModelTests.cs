@@ -4,6 +4,7 @@ using MarlinToolset.ViewModels;
 using MarlinToolset.Views;
 using Moq;
 using System;
+using System.Text;
 using Xunit;
 
 namespace MarlinToolset.UnitTests.ViewModels
@@ -162,5 +163,119 @@ namespace MarlinToolset.UnitTests.ViewModels
             // Assert
             Equals(3, sut.Packets.Count);
         }
+
+        [Fact]
+        public void GivenSelectedConnectedPrinter_AndCommandText_WhenSend_ThenCommandSent_AndCommandAddedToHistory()
+        {
+            // Arrange
+            var mockPrintersConfigurationView = new Mock<IPrintersConfigurationView>();
+            var sut = new MainWindowViewModel(
+                _mockServiceProvider.Object,
+                _mockPrinterConfigurationManagerService.Object,
+                _mockPrinterControllerSevice.Object)
+            {
+                SelectedPrinter = new PrinterConfigurationModel()
+            };
+            var expectedData = "Hello World!";
+            sut.CommandText = expectedData;
+            var actualData = string.Empty;
+            var actualEncoding = default(Encoding);
+
+            _mockPrinterControllerSevice.SetupGet<bool>(x => x.IsConnected)
+                .Returns(true);
+
+            _mockPrinterControllerSevice.Setup(x => x.Write(
+                It.IsAny<string>(),
+                It.IsAny<Encoding>()))
+                .Callback((string data, Encoding encoding) =>
+                {
+                    actualData = data;
+                    actualEncoding = encoding;
+                });
+
+            // Act
+            sut.Send.Execute().Subscribe();
+
+            // Assert
+            Assert.Equal($"{expectedData}\n", actualData);
+            Assert.Single(sut.CommandHistory);
+        }
+
+        [Fact]
+        public void GivenCommandHistory_WhenPreviousCommand_ThenCommandTextSetToPreviousCommand()
+        {
+            // Arrange
+            var mockPrintersConfigurationView = new Mock<IPrintersConfigurationView>();
+            var sut = new MainWindowViewModel(
+                _mockServiceProvider.Object,
+                _mockPrinterConfigurationManagerService.Object,
+                _mockPrinterControllerSevice.Object)
+            {
+                SelectedPrinter = new PrinterConfigurationModel()
+            };
+            _mockPrinterControllerSevice.SetupGet<bool>(x => x.IsConnected)
+                .Returns(true);
+
+            sut.CommandText = "1";
+            sut.Send.Execute().Subscribe();
+            sut.CommandText = "2";
+            sut.Send.Execute().Subscribe();
+            sut.CommandText = "3";
+            sut.Send.Execute().Subscribe();
+
+            // Act
+            sut.PreviousCommand.Execute().Subscribe();
+            var prev1 = sut.CommandText;
+            sut.PreviousCommand.Execute().Subscribe();
+            var prev2 = sut.CommandText;
+            sut.PreviousCommand.Execute().Subscribe();
+            var prev3 = sut.CommandText;
+
+            // Assert
+            Assert.Equal("3", prev1);
+            Assert.Equal("2", prev2);
+            Assert.Equal("1", prev3);
+        }
+
+        [Fact]
+        public void GivenCommandHistory_AndAtTopOfHistory_WhenNextCommand_ThenCommandTextSetToNextCommand()
+        {
+            // Arrange
+            var mockPrintersConfigurationView = new Mock<IPrintersConfigurationView>();
+            var sut = new MainWindowViewModel(
+                _mockServiceProvider.Object,
+                _mockPrinterConfigurationManagerService.Object,
+                _mockPrinterControllerSevice.Object)
+            {
+                SelectedPrinter = new PrinterConfigurationModel()
+            };
+            _mockPrinterControllerSevice.SetupGet<bool>(x => x.IsConnected)
+                .Returns(true);
+
+            sut.CommandText = "1";
+            sut.Send.Execute().Subscribe();
+            sut.CommandText = "2";
+            sut.Send.Execute().Subscribe();
+            sut.CommandText = "3";
+            sut.Send.Execute().Subscribe();
+            sut.PreviousCommand.Execute().Subscribe();
+            sut.PreviousCommand.Execute().Subscribe();
+            sut.PreviousCommand.Execute().Subscribe();
+
+            // Act
+            var cmd1 = sut.CommandText;
+            sut.NextCommand.Execute().Subscribe();
+            var cmd2 = sut.CommandText;
+            sut.NextCommand.Execute().Subscribe();
+            var cmd3 = sut.CommandText;
+
+            // Assert
+            Assert.Equal("1", cmd1);
+            Assert.Equal("2", cmd2);
+            Assert.Equal("3", cmd3);
+        }
+
+
+
     }
 }

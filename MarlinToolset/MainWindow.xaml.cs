@@ -56,7 +56,8 @@ namespace MarlinToolset
                 this.BindCommand(
                     this.ViewModel,
                     viewModel => viewModel.Send,
-                    view => view.SendButton)
+                    view => view.SendButton,
+                    vm => vm.CommandText)
                 .DisposeWith(disposableRegistration);
 
                 ViewModel.TerminalListBox = TerminalListBox;
