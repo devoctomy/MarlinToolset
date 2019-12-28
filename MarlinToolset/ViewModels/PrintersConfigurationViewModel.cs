@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MarlinToolset.Model;
-using MarlinToolset.Services;
 using MarlinToolset.Views;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
@@ -10,6 +8,8 @@ using System;
 using System.Linq;
 using System.Reactive;
 using System.Windows;
+using MarlinToolset.Core.Services;
+using MarlinToolset.Domain.Model;
 
 namespace MarlinToolset.ViewModels
 {

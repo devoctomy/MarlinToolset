@@ -1,5 +1,5 @@
-﻿using MarlinToolset.Model;
-using MarlinToolset.Services;
+﻿using MarlinToolset.Core.Services;
+using MarlinToolset.Domain.Model;
 using MarlinToolset.ViewModels;
 using MarlinToolset.Views;
 using Moq;

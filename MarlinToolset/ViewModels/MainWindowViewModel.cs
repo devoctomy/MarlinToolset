@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MarlinToolset.Services;
 using MarlinToolset.Views;
 using ReactiveUI;
 using ReactiveUI.Validation.Contexts;
 using System;
 using System.Reactive;
 using ReactiveUI.Validation.Abstractions;
-using MarlinToolset.Model;
+using MarlinToolset.Domain.Model;
 using System.Windows;
 using System.Linq;
 using System.Collections.ObjectModel;
@@ -15,6 +14,7 @@ using System.Windows.Media;
 using System.Text;
 using ReactiveUI.Fody.Helpers;
 using System.Collections.Generic;
+using MarlinToolset.Core.Services;
 
 namespace MarlinToolset.ViewModels
 {

@@ -2,13 +2,12 @@
 using Splat;
 using ReactiveUI;
 using System.Windows;
-using System.Reflection;
-using MarlinToolset.Services;
 using System;
 using MarlinToolset.Views;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using MarlinToolset.ViewModels;
 using System.Diagnostics.CodeAnalysis;
+using MarlinToolset.Core.Services;
 
 namespace MarlinToolset
 {

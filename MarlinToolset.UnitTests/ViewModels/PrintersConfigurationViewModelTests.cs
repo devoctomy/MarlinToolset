@@ -1,11 +1,9 @@
-﻿using MarlinToolset.Model;
-using MarlinToolset.Services;
+﻿using MarlinToolset.Core.Services;
+using MarlinToolset.Domain.Model;
 using MarlinToolset.ViewModels;
 using MarlinToolset.Views;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace MarlinToolset.UnitTests.ViewModels

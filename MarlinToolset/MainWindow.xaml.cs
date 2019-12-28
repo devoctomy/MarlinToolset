@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MarlinToolset.Services;
 using System;
 using ReactiveUI;
 using MarlinToolset.ViewModels;
 using System.Reactive.Disposables;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
 
 namespace MarlinToolset
 {

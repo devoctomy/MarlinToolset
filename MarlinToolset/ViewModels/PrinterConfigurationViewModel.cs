@@ -1,4 +1,4 @@
-﻿using MarlinToolset.Model;
+﻿using MarlinToolset.Domain.Model;
 using ReactiveUI;
 using ReactiveUI.Validation.Abstractions;
 using ReactiveUI.Validation.Contexts;
