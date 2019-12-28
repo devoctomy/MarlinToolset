@@ -250,7 +250,37 @@ namespace MarlinToolset.UnitTests.Services
 
             // Act
             var result = sut.Write(
-                "This won't get sent!",
+                "This will get sent as the previous command was acknowledged!",
+                Encoding.ASCII);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, testableSerialPortAdapter.WrittenBinaryData.Count);
+        }
+
+        [Fact]
+        public void GivenConnectedPrinterControllerService_AndPrevCommandWaitingAck_AndCommandStackCleared_AndString_AndEncoding_WhenWrite_ThenCommandSent()
+        {
+            // Arrange
+            var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var testableSerialPortAdapter = new TestableSerialPortAdapter();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
+            var expectedDataString = "Hello World!";
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedOffset = 0;
+            var expectedCount = expectedDataString.Length;
+            sut.Connect(printer);
+            sut.Write(
+                expectedDataString,
+                Encoding.ASCII);
+            sut.ClearCommandStack();
+
+            // Act
+            var result = sut.Write(
+                "This will get sent as the command stack has been cleared!",
                 Encoding.ASCII);
 
             // Assert
