@@ -114,7 +114,7 @@ namespace MarlinToolset.UnitTests.Services
         }
 
         [Fact]
-        public void GivenConnectedPrinterControllerService_AndByteArray_WhenWrite_ThenByteArrayWrittenToPrinter()
+        public void GivenConnectedPrinterControllerService_AndByteArray_AndOffset_AndCount_WhenWrite_ThenByteArrayWrittenToPrinter_AndPrinterCommandReturned()
         {
             // Arrange
             var printer = new PrinterConfigurationModel();
@@ -124,22 +124,138 @@ namespace MarlinToolset.UnitTests.Services
                 testableSerialPortAdapter,
                 mockPrinterPacketParser.Object);
             var expectedDataString = "Hello World!";
-            var expecetdDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
             var expectedOffset = 1;
             var expectedCount = 2;
             sut.Connect(printer);
 
             // Act
-            sut.Write(
-                expecetdDataBytes,
+            var result = sut.Write(
+                expectedDataBytes,
                 expectedOffset,
                 expectedCount);
 
             // Assert
+            Assert.Equal(expectedDataBytes, result.Data);
+            Assert.Equal(expectedOffset, result.Offset);
+            Assert.Equal(expectedCount, result.Count);
+            Assert.False(result.Acknowledged);
             Assert.Single(testableSerialPortAdapter.WrittenBinaryData);
-            Assert.Equal(expecetdDataBytes, testableSerialPortAdapter.WrittenBinaryData[0].Data);
+            Assert.Equal(expectedDataBytes, testableSerialPortAdapter.WrittenBinaryData[0].Data);
             Assert.Equal(expectedOffset, testableSerialPortAdapter.WrittenBinaryData[0].Offset);
             Assert.Equal(expectedCount, testableSerialPortAdapter.WrittenBinaryData[0].Count);
+        }
+
+        [Fact]
+        public void GivenConnectedPrinterControllerService_AndString_AndEncoding_WhenWrite_ThenByteArrayWrittenToPrinter_AndPrinterCommandReturned()
+        {
+            // Arrange
+            var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var testableSerialPortAdapter = new TestableSerialPortAdapter();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
+            var expectedDataString = "Hello World!";
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedOffset = 0;
+            var expectedCount = expectedDataString.Length;
+            sut.Connect(printer);
+
+            // Act
+            var result = sut.Write(
+                expectedDataString,
+                Encoding.ASCII);
+
+            // Assert
+            Assert.Equal(expectedDataBytes, result.Data);
+            Assert.Equal(expectedOffset, result.Offset);
+            Assert.Equal(expectedCount, result.Count);
+            Assert.False(result.Acknowledged);
+            Assert.Single(testableSerialPortAdapter.WrittenBinaryData);
+            Assert.Equal(expectedDataBytes, testableSerialPortAdapter.WrittenBinaryData[0].Data);
+            Assert.Equal(expectedOffset, testableSerialPortAdapter.WrittenBinaryData[0].Offset);
+            Assert.Equal(expectedCount, testableSerialPortAdapter.WrittenBinaryData[0].Count);
+        }
+
+        [Fact]
+        public void GivenConnectedPrinterControllerService_AndPrevCommandWaitingAck_AndString_AndEncoding_WhenWrite_ThenNullReturned()
+        {
+            // Arrange
+            var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var testableSerialPortAdapter = new TestableSerialPortAdapter();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
+            var expectedDataString = "Hello World!";
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedOffset = 0;
+            var expectedCount = expectedDataString.Length;
+            sut.Connect(printer);
+            sut.Write(
+                expectedDataString,
+                Encoding.ASCII);
+
+            // Act
+            var result = sut.Write(
+                "This won't get sent!",
+                Encoding.ASCII);
+
+            // Assert
+            Assert.Null(result);
+            Assert.Single(testableSerialPortAdapter.WrittenBinaryData);
+            Assert.Equal(expectedDataBytes, testableSerialPortAdapter.WrittenBinaryData[0].Data);
+            Assert.Equal(expectedOffset, testableSerialPortAdapter.WrittenBinaryData[0].Offset);
+            Assert.Equal(expectedCount, testableSerialPortAdapter.WrittenBinaryData[0].Count);
+        }
+
+        [Fact]
+        public void GivenConnectedPrinterControllerService_AndCommandAcked_AndString_AndEncoding_WhenWrite_ThenCommandSent()
+        {
+            // Arrange
+            var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var testableSerialPortAdapter = new TestableSerialPortAdapter();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
+            var expectedDataString = "Hello World!";
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedOffset = 0;
+            var expectedCount = expectedDataString.Length;
+            sut.Connect(printer);
+            sut.Write(
+                expectedDataString,
+                Encoding.ASCII);
+
+            mockPrinterPacketParser.Setup(x => x.ReceiveData(
+                It.Is<string>(x => x == "ok\n")))
+                .Callback(() =>
+                {
+                    mockPrinterPacketParser.Raise(
+                        x => x.PacketComplete += null,
+                        new PrinterPacketParserPacketCompleteEventArgs()
+                        {
+                            Packet = new PrinterPacket()
+                            {
+                                IsAck = true
+                            }
+                        });
+                });
+
+            sut.SerialPortAdapterRef.DataReceivedCallback(
+                sut.SerialPortAdapterRef,
+                "ok\n");
+
+            // Act
+            var result = sut.Write(
+                "This won't get sent!",
+                Encoding.ASCII);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(2, testableSerialPortAdapter.WrittenBinaryData.Count);
         }
     }
 }
