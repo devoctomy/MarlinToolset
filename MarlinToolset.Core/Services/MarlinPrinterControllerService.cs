@@ -33,10 +33,11 @@ namespace MarlinToolset.Core.Services
         {
             if(_commandStack.Count > 0 && !_commandStack.Peek().Acknowledged)
             {
-                _commandStack.Peek().CommandQueue.Enqueue(e.Packet);
+                _commandStack.Peek().ResponsePacketQueue.Enqueue(e.Packet);
                 if (e.Packet.IsAck)
                 {
                     _commandStack.Peek().Acknowledged = true;
+                    _commandStack.Peek().AcknowledgedAt = DateTime.UtcNow;
                 }
             }
             ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Packet = e.Packet });
