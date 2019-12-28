@@ -6,5 +6,5 @@ script:
 - choco install dotnetcore-sdk
 - choco install codecov
 - dotnet build -c Release
-- dotnet test --filter "FullyQualifiedName~UnitTests" -p:CollectCoverage=true -p:CoverletOutputFormat="json%2copencover" -p:CoverletOutput="../coverage" -p:MergeWith="../coverage.json" --no-build MarlinToolset.sln
+- dotnet test --filter "FullyQualifiedName~UnitTests" -p:CollectCoverage=true -p:CoverletOutputFormat="json%2copencover" -p:CoverletOutput="../coverage" -p:MergeWith="../coverage.json" -c Release --no-build MarlinToolset.sln
 - codecov -f "coverage.opencover.xml" -t 897ab45c-78db-4827-9f29-bc82d82676f8
