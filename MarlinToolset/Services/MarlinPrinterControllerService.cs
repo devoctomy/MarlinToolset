@@ -8,7 +8,7 @@ namespace MarlinToolset.Services
 {
     public class MarlinPrinterControllerService : IPrinterControllerService
     {
-        private const string MARLIN_COMMAND_ACK = "ok";
+        
 
         public event EventHandler<PrinterControllerReceivedDataEventArgs> ReceivedData;
 
@@ -35,7 +35,7 @@ namespace MarlinToolset.Services
             if(_commandStack.Count > 0 && !_commandStack.Peek().Acknowledged)
             {
                 _commandStack.Peek().CommandQueue.Enqueue(e.Packet);
-                if (e.Packet.PreProcessedData.Equals(MARLIN_COMMAND_ACK))
+                if (e.Packet.IsAck)
                 {
                     _commandStack.Peek().Acknowledged = true;
                 }

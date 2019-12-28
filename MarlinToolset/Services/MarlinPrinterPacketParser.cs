@@ -5,6 +5,8 @@ namespace MarlinToolset.Services
 {
     public class MarlinPrinterPacketParser : IPrinterPacketParser
     {
+        private const string MARLIN_COMMAND_ACK = "ok";
+
         public event EventHandler<PrinterPacketParserPacketCompleteEventArgs> PacketComplete;
 
         private readonly MarlinPrinterPacketParserOptions _options;
@@ -56,7 +58,8 @@ namespace MarlinToolset.Services
             return new PrinterPacket()
             {
                 RawData = completePacketData,
-                PreProcessedData = preProcessedPacketData
+                PreProcessedData = preProcessedPacketData,
+                IsAck = preProcessedPacketData.Equals(MARLIN_COMMAND_ACK)
             };
         }
 

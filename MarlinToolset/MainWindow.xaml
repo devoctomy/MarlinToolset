@@ -69,7 +69,8 @@
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="CommandTextBox"
                                  KeyDown="CommandTextBox_KeyDown"
-                                 VerticalContentAlignment="Center">
+                                 VerticalContentAlignment="Center"
+                                 PreviewKeyDown="CommandTextBox_PreviewKeyDown">
                         </TextBox>
                         <Button x:Name="SendButton"
                                 Grid.Column="1"

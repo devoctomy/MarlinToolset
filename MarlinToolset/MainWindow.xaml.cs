@@ -67,9 +67,32 @@ namespace MarlinToolset
             object sender,
             System.Windows.Input.KeyEventArgs e)
         {
-            if(e.Key == System.Windows.Input.Key.Enter)
+            switch(e.Key)
             {
-                ViewModel.Send.Execute().Subscribe();
+                case System.Windows.Input.Key.Enter:
+                    {
+                        ViewModel.Send.Execute().Subscribe();
+                        break;
+                    }
+            }
+        }
+
+        private void CommandTextBox_PreviewKeyDown(
+            object sender,
+            System.Windows.Input.KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Input.Key.Up:
+                    {
+                        ViewModel.PreviousCommand.Execute().Subscribe();
+                        break;
+                    }
+                case System.Windows.Input.Key.Down:
+                    {
+                        ViewModel.NextCommand.Execute().Subscribe();
+                        break;
+                    }
             }
         }
     }
