@@ -79,19 +79,6 @@ namespace MarlinToolset.Services
 
         public bool Write(
             SerialPortAdapterRef portRef,
-            string data,
-            Encoding encoding)
-        {
-            var bytes = encoding.GetBytes(data);
-            return Write(
-                portRef,
-                bytes,
-                0,
-                bytes.Length);
-        }
-
-        public bool Write(
-            SerialPortAdapterRef portRef,
             byte[] data,
             int offset,
             int count)

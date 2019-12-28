@@ -5,6 +5,7 @@ using ReactiveUI;
 using MarlinToolset.ViewModels;
 using System.Reactive.Disposables;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
 
 namespace MarlinToolset
 {
@@ -47,9 +48,29 @@ namespace MarlinToolset
                     view => view.TerminalListBox.ItemsSource)
                 .DisposeWith(disposableRegistration);
 
+                this.Bind(ViewModel,
+                    viewModel => viewModel.CommandText,
+                    view => view.CommandTextBox.Text)
+                .DisposeWith(disposableRegistration);
+
+                this.BindCommand(
+                    this.ViewModel,
+                    viewModel => viewModel.Send,
+                    view => view.SendButton)
+                .DisposeWith(disposableRegistration);
 
                 ViewModel.TerminalListBox = TerminalListBox;
             });
+        }
+
+        private void CommandTextBox_KeyDown(
+            object sender,
+            System.Windows.Input.KeyEventArgs e)
+        {
+            if(e.Key == System.Windows.Input.Key.Enter)
+            {
+                ViewModel.Send.Execute().Subscribe();
+            }
         }
     }
 }

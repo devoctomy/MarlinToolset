@@ -9,7 +9,6 @@ namespace MarlinToolset.UnitTests.Services
     public class TestableSerialPortAdapter : ISerialPortAdapter
     {
         public IReadOnlyList<SerialPortAdapterRef> PortRefs => null;
-        public List<SerialPortAdapterWriteStringData> WrittenStringData { get; private set; }
         public List<SerialPortAdapterWriteBinaryData> WrittenBinaryData { get; private set; }
         public PrinterConfigurationModel Config { get; private set; }
         public Action<SerialPortAdapterRef, string> Callback { get; private set; }
@@ -24,7 +23,6 @@ namespace MarlinToolset.UnitTests.Services
             PrinterConfigurationModel config,
             Action<SerialPortAdapterRef, string> dataReceivedCallback)
         {
-            WrittenStringData = new List<SerialPortAdapterWriteStringData>();
             WrittenBinaryData = new List<SerialPortAdapterWriteBinaryData>();
             Config = config;
             Callback = dataReceivedCallback;
@@ -41,27 +39,6 @@ namespace MarlinToolset.UnitTests.Services
                 Config = null;
                 Callback = null;
                 SerialPortAdapterRef = null;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool Write(
-            SerialPortAdapterRef portRef,
-            string data,
-            Encoding encoding)
-        {
-            if(portRef == SerialPortAdapterRef)
-            {
-                WrittenStringData.Add(new SerialPortAdapterWriteStringData()
-                {
-                    Data = data,
-                    Encoding = encoding
-                });
-
                 return true;
             }
             else

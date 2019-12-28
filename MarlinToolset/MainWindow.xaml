@@ -50,12 +50,34 @@
                           VerticalAlignment="Bottom" 
                           ResizeBehavior="CurrentAndNext"></GridSplitter>
             <Grid Grid.Row="1">
-                <ListBox x:Name="TerminalListBox"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="32"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="TerminalListBox"
                          DisplayMemberPath="PreProcessedData"
                          Background="Black"
                          Foreground="Green"
                          FontFamily="Courier New">
-                </ListBox>
+                    </ListBox>
+                    <Grid Grid.Row="1"
+                          Margin="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="128"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="CommandTextBox"
+                                 KeyDown="CommandTextBox_KeyDown"
+                                 VerticalContentAlignment="Center">
+                        </TextBox>
+                        <Button x:Name="SendButton"
+                                Grid.Column="1"
+                                Content="Send"
+                                Margin="8,0,0,0">
+                        </Button>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </DockPanel>

@@ -1,5 +1,6 @@
 ﻿using MarlinToolset.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -7,6 +8,8 @@ namespace MarlinToolset.Services
 {
     public class MarlinPrinterControllerService : IPrinterControllerService
     {
+        private const string MARLIN_COMMAND_ACK = "ok";
+
         public event EventHandler<PrinterControllerReceivedDataEventArgs> ReceivedData;
 
         public PrinterConfigurationModel Printer { get; private set; }
@@ -15,6 +18,7 @@ namespace MarlinToolset.Services
 
         private readonly ISerialPortAdapter _serialPortAdapter;
         private readonly IPrinterPacketParser _printerPacketParser;
+        private readonly Stack<PrinterCommand> _commandStack;
 
         public MarlinPrinterControllerService(
             ISerialPortAdapter serialPortAdapter,
@@ -22,12 +26,20 @@ namespace MarlinToolset.Services
         {
             _serialPortAdapter = serialPortAdapter;
             _printerPacketParser = printerPacketParser;
-
             _printerPacketParser.PacketComplete += PacketParser_PacketComplete;
+            _commandStack = new Stack<PrinterCommand>();
         }
 
         private void PacketParser_PacketComplete(object sender, PrinterPacketParserPacketCompleteEventArgs e)
         {
+            if(_commandStack.Count > 0 && !_commandStack.Peek().Acknowledged)
+            {
+                _commandStack.Peek().CommandQueue.Enqueue(e.Packet);
+                if (e.Packet.PreProcessedData.Equals(MARLIN_COMMAND_ACK))
+                {
+                    _commandStack.Peek().Acknowledged = true;
+                }
+            }
             ReceivedData?.Invoke(this, new PrinterControllerReceivedDataEventArgs() { Packet = e.Packet });
         }
 
@@ -59,32 +71,78 @@ namespace MarlinToolset.Services
             _printerPacketParser.ReceiveData(data);
         }
 
-        public void Write(
+        public PrinterCommand Write(
             string data,
             Encoding encoding)
         {
-            if (SerialPortAdapterRef != null)
+            if (!WaitingOnPreviousCommand() && SerialPortAdapterRef != null)
             {
-                _serialPortAdapter.Write(
-                    SerialPortAdapterRef,
-                    data,
-                    encoding);
+                var dataBytes = encoding.GetBytes(data);
+                return OnWrite(
+                    dataBytes,
+                    0,
+                    dataBytes.Length);
+            }
+            else
+            {
+                return null;
             }
         }
 
-        public void Write(
+        public PrinterCommand Write(
             byte[] data,
             int offset,
             int count)
         {
-            if (SerialPortAdapterRef != null)
+            if (!WaitingOnPreviousCommand() && SerialPortAdapterRef != null)
             {
-                _serialPortAdapter.Write(
-                    SerialPortAdapterRef,
+                return OnWrite(
                     data,
                     offset,
                     count);
             }
+            else
+            {
+                return null;
+            }
+        }
+
+        private PrinterCommand OnWrite(
+            byte[] data,
+            int offset,
+            int count)
+        {
+            _serialPortAdapter.Write(
+                SerialPortAdapterRef,
+                data,
+                offset,
+                count);
+
+            var command = new PrinterCommand()
+            {
+                Data = data,
+                Offset = offset,
+                Count = count,
+                Acknowledged = false
+            };
+            
+            _commandStack.Push(command);
+            return command;
+        }
+
+        private bool WaitingOnPreviousCommand()
+        {
+            if(_commandStack.Count > 0)
+            {
+                return !_commandStack.Peek().Acknowledged;
+            }
+
+            return false;
+        }
+
+        public void ClearCommandStack()
+        {
+            _commandStack.Clear();
         }
     }
 }

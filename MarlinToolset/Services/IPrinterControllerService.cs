@@ -12,12 +12,13 @@ namespace MarlinToolset.Services
         bool IsConnected { get; }
         void Connect(PrinterConfigurationModel printer);
         void Disconnect();
+        void ClearCommandStack();
 
-        void Write(
+        PrinterCommand Write(
             string data,
             Encoding encoding);
 
-        void Write(
+        PrinterCommand Write(
             byte[] data,
             int offset,
             int count);

@@ -18,11 +18,6 @@ namespace MarlinToolset.Services
 
         bool Write(
             SerialPortAdapterRef portRef,
-            string data,
-            Encoding encoding);
-
-        bool Write(
-            SerialPortAdapterRef portRef,
             byte[] data,
             int offset,
             int count);

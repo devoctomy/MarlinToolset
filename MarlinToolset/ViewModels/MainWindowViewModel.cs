@@ -10,9 +10,10 @@ using MarlinToolset.Model;
 using System.Windows;
 using System.Linq;
 using System.Collections.ObjectModel;
-using System.Windows.Threading;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Text;
+using ReactiveUI.Fody.Helpers;
 
 namespace MarlinToolset.ViewModels
 {
@@ -25,8 +26,9 @@ namespace MarlinToolset.ViewModels
         public ListBox TerminalListBox { get; set; }
         public bool IsConnected { get; private set; }
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
-
         public ObservableCollection<PrinterPacket> Packets { get; }
+        [Reactive] public string CommandText { get; set; }
+        public ReactiveCommand<Unit, Unit> Send { get; }
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IPrinterControllerService _printerControllerService;
@@ -46,6 +48,7 @@ namespace MarlinToolset.ViewModels
             ConfigurePrinters = ReactiveCommand.Create(new Action(OnConfigurePrinters));
             ConnectToggle = ReactiveCommand.Create(new Action(OnConnectToggle));
             Packets = new ObservableCollection<PrinterPacket>();
+            Send = ReactiveCommand.Create(new Action(OnSend));
         }
 
         private void PrinterControllerService_ReceivedData(
@@ -90,6 +93,18 @@ namespace MarlinToolset.ViewModels
                 {
                     _printerControllerService.Connect(SelectedPrinter);
                 }
+            }
+        }
+
+        private void OnSend()
+        {
+            if (SelectedPrinter != null && _printerControllerService.IsConnected)
+            {
+                var data = CommandText;
+                CommandText = string.Empty;
+                _printerControllerService.Write(
+                    $"{data}\n",
+                    Encoding.ASCII);
             }
         }
     }

@@ -114,31 +114,6 @@ namespace MarlinToolset.UnitTests.Services
         }
 
         [Fact]
-        public void GivenConnectedPrinterControllerService_AndString_WhenWrite_ThenStringWrittenToPrinter()
-        {
-            // Arrange
-            var printer = new PrinterConfigurationModel();
-            var testableSerialPortAdapter = new TestableSerialPortAdapter();
-            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
-            var sut = new MarlinPrinterControllerService(
-                testableSerialPortAdapter,
-                mockPrinterPacketParser.Object);
-            var expecetdData = "Hello World!";
-            var expectedEncoding = Encoding.ASCII;
-            sut.Connect(printer);
-
-            // Act
-            sut.Write(
-                expecetdData,
-                expectedEncoding);
-
-            // Assert
-            Assert.Single(testableSerialPortAdapter.WrittenStringData);
-            Assert.Equal(expecetdData, testableSerialPortAdapter.WrittenStringData[0].Data);
-            Assert.Equal(expectedEncoding, testableSerialPortAdapter.WrittenStringData[0].Encoding);
-        }
-
-        [Fact]
         public void GivenConnectedPrinterControllerService_AndByteArray_WhenWrite_ThenByteArrayWrittenToPrinter()
         {
             // Arrange
