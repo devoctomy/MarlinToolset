@@ -204,10 +204,35 @@ namespace MarlinToolset.UnitTests.Services
 
             // Assert
             Assert.Null(result);
-            Assert.Single(testableSerialPortAdapter.WrittenBinaryData);
-            Assert.Equal(expectedDataBytes, testableSerialPortAdapter.WrittenBinaryData[0].Data);
-            Assert.Equal(expectedOffset, testableSerialPortAdapter.WrittenBinaryData[0].Offset);
-            Assert.Equal(expectedCount, testableSerialPortAdapter.WrittenBinaryData[0].Count);
+        }
+
+        [Fact]
+        public void GivenConnectedPrinterControllerService_AndPrevCommandWaitingAck_AndByteArray_AndOffset_AndCount_WhenWrite_ThenNullReturned()
+        {
+            // Arrange
+            var printer = new PrinterConfigurationModel();
+            var mockPrinterPacketParser = new Mock<IPrinterPacketParser>();
+            var testableSerialPortAdapter = new TestableSerialPortAdapter();
+            var sut = new MarlinPrinterControllerService(
+                testableSerialPortAdapter,
+                mockPrinterPacketParser.Object);
+            var expectedDataString = "This won't get sent!";
+            var expectedDataBytes = Encoding.ASCII.GetBytes(expectedDataString);
+            var expectedOffset = 1;
+            var expectedCount = 2;
+            sut.Write(
+                Encoding.ASCII.GetBytes("Hello World!"),
+                expectedOffset,
+                expectedCount);
+
+            // Act
+            var result = sut.Write(
+                expectedDataBytes,
+                expectedOffset,
+                expectedCount);
+
+            // Assert
+            Assert.Null(result);
         }
 
         [Fact]
