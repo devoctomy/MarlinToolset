@@ -1,0 +1,33 @@
+﻿{
+  "Commands": [
+    {
+      "Key": "G10",
+      "Description": "Description of the command.",
+      "Url": "http://www.somewebsite.com/docs/commands/g10",
+      "Parameters": [
+        {
+          "Token": "A",
+          "Description": "Parameter 1.",
+          "Optional": true
+        },
+        {
+          "Token": "B",
+          "Description": "Parameter 2.",
+          "Optional": false
+        },
+        {
+          "Token": "C",
+          "Description": "Parameter 3.",
+          "Optional": false,
+          "Requires": "[P1,P2,P3,Z]"
+        },
+        {
+          "Token": "D",
+          "Description": "Parameter 4.",
+          "Optional": false,
+          "Choices": "1,2,3,4,5"
+        }
+      ]
+    }
+  ]
+}
