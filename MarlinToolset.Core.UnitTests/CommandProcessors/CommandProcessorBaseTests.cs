@@ -16,21 +16,26 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
-                new CommandParameter(
-                    "B",
-                    "Parameter 2",
-                    typeof(int),
-                    false),
-                new CommandParameter(
-                    "C",
-                    "Parameter 3",
-                    typeof(float),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                },
+                new CommandParameter()
+                {
+                    Token = "B",
+                    Description = "Parameter 2",
+                    Optional = false,
+                    ValueType = typeof(int)
+                },
+                new CommandParameter()
+                {
+                    Token = "C",
+                    Description = "Parameter 3",
+                    Optional = false,
+                    ValueType = typeof(float)
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
@@ -52,21 +57,26 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
-                new CommandParameter(
-                    "B",
-                    "Parameter 2",
-                    typeof(int),
-                    false),
-                new CommandParameter(
-                    "C",
-                    "Parameter 3",
-                    typeof(float),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                },
+                new CommandParameter()
+                {
+                    Token = "B",
+                    Description = "Parameter 2",
+                    Optional = false,
+                    ValueType = typeof(int)
+                },
+                new CommandParameter()
+                {
+                    Token = "C",
+                    Description = "Parameter 3",
+                    Optional = false,
+                    ValueType = typeof(float)
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
@@ -88,21 +98,26 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
-                new CommandParameter(
-                    "B",
-                    "Parameter 2",
-                    typeof(int),
-                    false),
-                new CommandParameter(
-                    "C",
-                    "Parameter 3",
-                    typeof(float),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                },
+                new CommandParameter()
+                {
+                    Token = "B",
+                    Description = "Parameter 2",
+                    Optional = false,
+                    ValueType = typeof(int)
+                },
+                new CommandParameter()
+                {
+                    Token = "C",
+                    Description = "Parameter 3",
+                    Optional = false,
+                    ValueType = typeof(float)
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
@@ -124,21 +139,26 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
-                new CommandParameter(
-                    "B",
-                    "Parameter 2",
-                    typeof(int),
-                    false),
-                new CommandParameter(
-                    "C",
-                    "Parameter 3",
-                    typeof(float),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                },
+                new CommandParameter()
+                {
+                    Token = "B",
+                    Description = "Parameter 2",
+                    Optional = false,
+                    ValueType = typeof(int)
+                },
+                new CommandParameter()
+                {
+                    Token = "C",
+                    Description = "Parameter 3",
+                    Optional = false,
+                    ValueType = typeof(float)
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
@@ -160,21 +180,26 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
-                new CommandParameter(
-                    "B",
-                    "Parameter 2",
-                    typeof(int),
-                    false),
-                new CommandParameter(
-                    "C",
-                    "Parameter 3",
-                    typeof(float),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                },
+                new CommandParameter()
+                {
+                    Token = "B",
+                    Description = "Parameter 2",
+                    Optional = false,
+                    ValueType = typeof(int)
+                },
+                new CommandParameter()
+                {
+                    Token = "C",
+                    Description = "Parameter 3",
+                    Optional = false,
+                    ValueType = typeof(float)
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
@@ -196,11 +221,12 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             // Arrange
             var parameters = new[]
             {
-                new CommandParameter(
-                    "A",
-                    "Parameter 1",
-                    typeof(bool),
-                    false),
+                new CommandParameter()
+                {
+                    Token = "A",
+                    Description = "Parameter 1",
+                    Optional = false
+                }
             };
             var sut = new TestableCommandProcessor(
                 "G10",
