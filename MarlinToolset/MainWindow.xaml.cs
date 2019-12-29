@@ -4,6 +4,7 @@ using ReactiveUI;
 using MarlinToolset.ViewModels;
 using System.Reactive.Disposables;
 using System.Diagnostics.CodeAnalysis;
+using System.Windows.Controls;
 
 namespace MarlinToolset
 {

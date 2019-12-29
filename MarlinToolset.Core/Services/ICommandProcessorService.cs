@@ -4,7 +4,7 @@ namespace MarlinToolset.Core.Services
 {
     public interface ICommandProcessorService
     {
-        string Command { get; }
+        string Key { get; }
         string Description { get; }
         string Url { get; }
         IList<CommandParameter> Parameters { get; }

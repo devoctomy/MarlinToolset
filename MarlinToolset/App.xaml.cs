@@ -8,6 +8,8 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using MarlinToolset.ViewModels;
 using System.Diagnostics.CodeAnalysis;
 using MarlinToolset.Core.Services;
+using System.Reflection;
+using System.Linq;
 
 namespace MarlinToolset
 {
@@ -22,6 +24,7 @@ namespace MarlinToolset
             ConfigureReactive(serviceCollection);
             ConfigureServices(serviceCollection);
             ConfigureViewsAndViewModels(serviceCollection);
+            ConfigureCommandProcessors(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat    
         }
@@ -68,6 +71,24 @@ namespace MarlinToolset
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<PrinterConfigurationViewModel>();
             services.AddTransient<PrintersConfigurationViewModel>();
+        }
+
+        private void ConfigureCommandProcessors(IServiceCollection services)
+        {
+            var assembly = Assembly.GetAssembly(typeof(ICommandProcessorService));
+
+            var type = typeof(ICommandProcessorService);
+            var types = assembly.GetTypes()
+                .Where(p => type.IsAssignableFrom(p) && ! p.IsInterface)
+                .ToArray();
+
+            foreach(var curProcessor in types)
+            {
+                services.AddTransient<ICommandProcessorService>(sp =>
+                {
+                    return (ICommandProcessorService)Activator.CreateInstance(curProcessor);
+                });
+            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
