@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Config\MarlinCommands.json" />
     <None Remove="Images\connect_24.png" />
     <None Remove="Images\disconnect_24.png" />
     <None Remove="Images\printer_24.png" />
@@ -15,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Config\MarlinCommands.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\connect_24.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
