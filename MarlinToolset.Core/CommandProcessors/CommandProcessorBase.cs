@@ -7,13 +7,13 @@ namespace MarlinToolset.Core.CommandProcessors
 {
     public class CommandProcessorBase : ICommandProcessorService
     {
-        public virtual string Key => throw new System.NotImplementedException();
+        public virtual string Key { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
-        public virtual string Description => throw new System.NotImplementedException();
+        public virtual string Description { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
-        public virtual string Url => throw new System.NotImplementedException();
+        public virtual string Url { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
-        public virtual IList<CommandParameter> Parameters => throw new System.NotImplementedException();
+        public virtual IList<CommandParameter> Parameters { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
 
         public virtual bool Process(PrinterCommand command)
         {
@@ -42,7 +42,7 @@ namespace MarlinToolset.Core.CommandProcessors
                     }
                     else
                     {
-                        parameter.Value = commandParts[curPart].Substring(1);
+                        parameter.SetValue(commandParts[curPart].Length > 1 ? commandParts[curPart].Substring(1) : "true");
                         referencedParameters.Add(parameter);
                     }
                 }
