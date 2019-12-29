@@ -1,5 +1,6 @@
 ﻿using MarlinToolset.Core.Exceptions;
 using MarlinToolset.Core.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,17 +33,24 @@ namespace MarlinToolset.Core.CommandProcessors
                 var parameter = Parameters.SingleOrDefault(x => x.Token == token);
                 if (parameter == null)
                 {
-                    throw new UnknownCommandParametersException(token);
+                    throw new UnknownCommandParameterException(token);
                 }
                 else
                 {
                     if (referencedParameters.Contains(parameter))
                     {
-                        throw new DuplicateCommandParametersException(parameter);
+                        throw new DuplicateCommandParameterException(parameter);
                     }
                     else
                     {
-                        parameter.SetValue(commandParts[curPart].Length > 1 ? commandParts[curPart].Substring(1) : "true");
+                        try
+                        {
+                            parameter.SetValue(commandParts[curPart].Length > 1 ? commandParts[curPart].Substring(1) : "true");
+                        }
+                        catch (FormatException)
+                        {
+                            throw new InvalidCommandParameterException(token);
+                        }
                         referencedParameters.Add(parameter);
                     }
                 }
@@ -53,7 +61,7 @@ namespace MarlinToolset.Core.CommandProcessors
 
             if (unreferencedRequired.Any())
             {
-                throw new UnreferencedRequiredCommandParametersException(unreferencedRequired);
+                throw new UnreferencedRequiredCommandParameterException(unreferencedRequired);
             }
         }
     }

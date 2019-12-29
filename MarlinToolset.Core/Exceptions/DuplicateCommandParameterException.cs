@@ -3,29 +3,29 @@ using System;
 
 namespace MarlinToolset.Core.Exceptions
 {
-    public class DuplicateCommandParametersException : MarlinToolsetException
+    public class DuplicateCommandParameterException : MarlinToolsetException
     {
         public CommandParameter Duplicate { get; private set; }
 
-        public DuplicateCommandParametersException(
+        public DuplicateCommandParameterException(
             string message)
             : base(message)
         {
         }
 
-        public DuplicateCommandParametersException(
+        public DuplicateCommandParameterException(
             string message,
             Exception innerException)
             : base(message, innerException)
         {
         }
 
-        public DuplicateCommandParametersException()
-            : base($"Command has duplicate parameters.")
+        public DuplicateCommandParameterException()
+            : base($"Command parameter is duplicate.")
         {
         }
 
-        public DuplicateCommandParametersException(CommandParameter parameter)
+        public DuplicateCommandParameterException(CommandParameter parameter)
             : base($"Command parameter '{parameter.Token}' is duplicated.")
         {
             Duplicate = parameter;

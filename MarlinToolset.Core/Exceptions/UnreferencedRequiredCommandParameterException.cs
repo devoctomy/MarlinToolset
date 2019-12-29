@@ -5,29 +5,29 @@ using System.Linq;
 
 namespace MarlinToolset.Core.Exceptions
 {
-    public class UnreferencedRequiredCommandParametersException : MarlinToolsetException
+    public class UnreferencedRequiredCommandParameterException : MarlinToolsetException
     {
         public IEnumerable<CommandParameter> UnreferencedRequired { get; private set; }
 
-        public UnreferencedRequiredCommandParametersException(
+        public UnreferencedRequiredCommandParameterException(
             string message)
             : base(message)
         {
         }
 
-        public UnreferencedRequiredCommandParametersException(
+        public UnreferencedRequiredCommandParameterException(
             string message,
             Exception innerException)
             : base(message, innerException)
         {
         }
 
-        public UnreferencedRequiredCommandParametersException()
-            : base($"Command has unreferenced required parameters.")
+        public UnreferencedRequiredCommandParameterException()
+            : base($"Command parameter is required.")
         {
         }
 
-        public UnreferencedRequiredCommandParametersException(IEnumerable<CommandParameter> parameters)
+        public UnreferencedRequiredCommandParameterException(IEnumerable<CommandParameter> parameters)
             : base($"Command has {parameters.Count()} unreferenced required parameters.")
         {
             UnreferencedRequired = parameters;

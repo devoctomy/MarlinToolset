@@ -3,23 +3,23 @@ using System;
 
 namespace MarlinToolset.Core.Exceptions
 {
-    public class UnknownCommandParametersException : MarlinToolsetException
+    public class UnknownCommandParameterException : MarlinToolsetException
     {
         public string Key { get; private set; }
 
-        public UnknownCommandParametersException(
+        public UnknownCommandParameterException(
             string message,
             Exception innerException)
             : base(message, innerException)
         {
         }
 
-        public UnknownCommandParametersException()
-            : base($"Command has one or more unknown parameters.")
+        public UnknownCommandParameterException()
+            : base($"Command parameter is unknown.")
         {
         }
 
-        public UnknownCommandParametersException(string key)
+        public UnknownCommandParameterException(string key)
             : base($"Command parameter '{key}' is unknown.")
         {
             Key = key;
