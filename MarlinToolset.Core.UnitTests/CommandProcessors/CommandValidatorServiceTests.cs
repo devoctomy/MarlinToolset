@@ -94,7 +94,7 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
             var commandText = "G10 B1 C2.3";
 
             // Act / Assert
-            Assert.ThrowsAny<UnreferencedRequiredCommandParameterException>(() =>
+            Assert.ThrowsAny<UnreferencedRequiredCommandParametersException>(() =>
             {
                 sut.Validate(
                     definition,
@@ -211,7 +211,7 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = "int"
+                    ValueType = "int",
                 },
                 new CommandParameter()
                 {

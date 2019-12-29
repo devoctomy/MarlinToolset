@@ -18,6 +18,7 @@ namespace MarlinToolset.Core.Services
             for (int curPart = 1; curPart < commandParts.Length; curPart++)
             {
                 var token = commandParts[curPart][0].ToString().ToUpper();
+                var value = commandParts[curPart].Length > 1 ? commandParts[curPart].Substring(1) : null;
                 var parameter = commandDefinition.Parameters.SingleOrDefault(x => x.Token == token);
                 if (parameter == null)
                 {
@@ -31,9 +32,35 @@ namespace MarlinToolset.Core.Services
                     }
                     else
                     {
+                        if(!string.IsNullOrWhiteSpace(parameter.Requires))
+                        {
+                            var requires = parameter.Requires.Split(',');
+                            foreach(var curRequired in requires)
+                            {
+                                var match = commandParts.SingleOrDefault(x => x.StartsWith(curRequired));
+                                if(match == null)
+                                {
+                                    throw new UnreferencedRequiredCommandParametersException();
+                                }
+                            }
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(parameter.Choices))
+                        {
+                            var choices = parameter.Choices.Split(',');
+                            var match = choices.SingleOrDefault(x => x == commandParts[curPart].Substring(1));
+                            if (match == null)
+                            {
+                                throw new InvalidParameterChoiceException(
+                                   token,
+                                   value,
+                                   choices);
+                            }
+                        }
+
                         try
                         {
-                            parameter.SetValue(commandParts[curPart].Length > 1 ? commandParts[curPart].Substring(1) : "true");
+                            parameter.SetValue(!string.IsNullOrEmpty(value) ? value : "true");
                         }
                         catch (FormatException)
                         {
@@ -49,7 +76,7 @@ namespace MarlinToolset.Core.Services
 
             if (unreferencedRequired.Any())
             {
-                throw new UnreferencedRequiredCommandParameterException(unreferencedRequired);
+                throw new UnreferencedRequiredCommandParametersException(unreferencedRequired);
             }
         }
     }

@@ -19,11 +19,11 @@ namespace MarlinToolset.Core.Services
             {
                 if (ValueType.Equals("int", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Value = int.Parse(value);
+                    Value = string.IsNullOrWhiteSpace(value) ? DefaultValue : int.Parse(value);
                 }
                 else if (ValueType.Equals("float", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Value = float.Parse(value);
+                    Value = string.IsNullOrWhiteSpace(value) ? DefaultValue : float.Parse(value);
                 }
             }
             else
