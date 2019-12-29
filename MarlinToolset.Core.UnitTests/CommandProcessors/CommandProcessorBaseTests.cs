@@ -119,6 +119,78 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
         }
 
         [Fact]
+        public void GivenCommandWithRequiredParameters_AndParameterUnknown_WhenValidate_ThenExceptionThrown()
+        {
+            // Arrange
+            var parameters = new[]
+            {
+                new CommandParameter(
+                    "A",
+                    "Parameter 1",
+                    typeof(bool),
+                    false),
+                new CommandParameter(
+                    "B",
+                    "Parameter 2",
+                    typeof(int),
+                    false),
+                new CommandParameter(
+                    "C",
+                    "Parameter 3",
+                    typeof(float),
+                    false),
+            };
+            var sut = new TestableCommandProcessor(
+                "G10",
+                "This is some command",
+                "http://www.somewebsite.com/docs/commands/g10",
+                parameters);
+            var commandText = "G10 A B1 C2.3 D1";
+
+            // Act / Assert
+            Assert.ThrowsAny<UnknownCommandParameterException>(() =>
+            {
+                sut.Validate(commandText);
+            });
+        }
+
+        [Fact]
+        public void GivenCommandWithRequiredParameters_AndDuplicateParameter_WhenValidate_ThenExceptionThrown()
+        {
+            // Arrange
+            var parameters = new[]
+            {
+                new CommandParameter(
+                    "A",
+                    "Parameter 1",
+                    typeof(bool),
+                    false),
+                new CommandParameter(
+                    "B",
+                    "Parameter 2",
+                    typeof(int),
+                    false),
+                new CommandParameter(
+                    "C",
+                    "Parameter 3",
+                    typeof(float),
+                    false),
+            };
+            var sut = new TestableCommandProcessor(
+                "G10",
+                "This is some command",
+                "http://www.somewebsite.com/docs/commands/g10",
+                parameters);
+            var commandText = "G10 A B1 C2.3 B1";
+
+            // Act / Assert
+            Assert.ThrowsAny<DuplicateCommandParameterException>(() =>
+            {
+                sut.Validate(commandText);
+            });
+        }
+
+        [Fact]
         public void GivenCommand_AndIncorrectCommandKey_WhenValidate_ThenExceptionThrown()
         {
             // Arrange
