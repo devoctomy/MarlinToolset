@@ -60,7 +60,7 @@ namespace MarlinToolset
                 return new MarlinPrinterPacketParser(options);
             });
             services.AddSingleton<ISerialPortAdapter, SerialPortAdapter<WrappedSerialPort>>();
-            services.AddTransient<ICommandValidator, CommandValidator>();
+            services.AddTransient<ICommandValidatorService, CommandValidatorService>();
             services.AddTransient<ICommandsDefinitionLoaderService, CommandsDefinitionLoaderService>(x =>
             {
                 var service = new CommandsDefinitionLoaderService();

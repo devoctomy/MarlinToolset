@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MarlinToolset.Core.Services
 {
-    public interface ICommandValidator
+    public interface ICommandValidatorService
     {
         public void Validate(
             CommandDefinition commandDefinition,

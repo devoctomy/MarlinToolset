@@ -36,7 +36,7 @@ namespace MarlinToolset.ViewModels
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IPrinterControllerService _printerControllerService;
-        private readonly ICommandValidator _commandValidator;
+        private readonly ICommandValidatorService _commandValidator;
         private readonly ICommandsDefinitionLoaderService _commandsDefinitionLoaderService;
         private int _historyIndex = 0;
 
@@ -44,7 +44,7 @@ namespace MarlinToolset.ViewModels
             IServiceProvider serviceProvider,
             IPrinterConfigurationManagerService printerConfigurationManagerService,
             IPrinterControllerService printerControllerService,
-            ICommandValidator commandValidator,
+            ICommandValidatorService commandValidator,
             ICommandsDefinitionLoaderService commandsDefinitionLoaderService)
         {
             _serviceProvider = serviceProvider;

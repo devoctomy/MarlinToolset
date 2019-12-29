@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MarlinToolset.Core.Services
 {
-    public class CommandValidator : ICommandValidator
+    public class CommandValidatorService : ICommandValidatorService
     {
         public void Validate(
             CommandDefinition commandDefinition,
