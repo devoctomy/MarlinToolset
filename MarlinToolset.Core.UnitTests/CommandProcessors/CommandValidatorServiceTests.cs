@@ -8,7 +8,7 @@ using Xunit;
 
 namespace MarlinToolset.Core.UnitTests.CommandProcessors
 {
-    public class CommandProcessorBaseTests
+    public class CommandValidatorServiceTests
     {
         [Fact]
         public void GivenCommandWithRequiredParameters_AndValidCommandText_WhenValidate_ThenNoExceptionThrown_AndParametersParsed()
@@ -27,28 +27,33 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = typeof(int)
+                    ValueType = "int"
                 },
                 new CommandParameter()
                 {
                     Token = "C",
                     Description = "Parameter 3",
                     Optional = false,
-                    ValueType = typeof(float)
+                    ValueType = "float"
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G10 A B1 C2.3";
 
             // Act / Assert
-            sut.Validate(commandText);
-            Assert.Equal(true, sut.Parameters.Single(x => x.Token == "A").Value);
-            Assert.Equal(1, sut.Parameters.Single(x => x.Token == "B").Value);
-            Assert.Equal(2.3f, sut.Parameters.Single(x => x.Token == "C").Value);
+            sut.Validate(
+                definition,
+                commandText);
+            Assert.Equal(true, definition.Parameters.Single(x => x.Token == "A").Value);
+            Assert.Equal(1, definition.Parameters.Single(x => x.Token == "B").Value);
+            Assert.Equal(2.3f, definition.Parameters.Single(x => x.Token == "C").Value);
         }
 
         [Fact]
@@ -68,27 +73,32 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = typeof(int)
+                    ValueType = "int"
                 },
                 new CommandParameter()
                 {
                     Token = "C",
                     Description = "Parameter 3",
                     Optional = false,
-                    ValueType = typeof(float)
+                    ValueType = "float"
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G10 B1 C2.3";
 
             // Act / Assert
             Assert.ThrowsAny<UnreferencedRequiredCommandParameterException>(() =>
             {
-                sut.Validate(commandText);
+                sut.Validate(
+                    definition,
+                    commandText);
             });
         }
 
@@ -109,27 +119,32 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = typeof(int)
+                    ValueType = "int"
                 },
                 new CommandParameter()
                 {
                     Token = "C",
                     Description = "Parameter 3",
                     Optional = false,
-                    ValueType = typeof(float)
+                    ValueType = "float"
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G10 A B1.5 C2.3";
 
             // Act / Assert
             Assert.ThrowsAny<InvalidCommandParameterException>(() =>
             {
-                sut.Validate(commandText);
+                sut.Validate(
+                    definition,
+                    commandText);
             });
         }
 
@@ -150,27 +165,32 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = typeof(int)
+                    ValueType = "int"
                 },
                 new CommandParameter()
                 {
                     Token = "C",
                     Description = "Parameter 3",
                     Optional = false,
-                    ValueType = typeof(float)
+                    ValueType = "float"
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G10 A B1 C2.3 D1";
 
             // Act / Assert
             Assert.ThrowsAny<UnknownCommandParameterException>(() =>
             {
-                sut.Validate(commandText);
+                sut.Validate(
+                    definition,
+                    commandText);
             });
         }
 
@@ -191,27 +211,32 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Token = "B",
                     Description = "Parameter 2",
                     Optional = false,
-                    ValueType = typeof(int)
+                    ValueType = "int"
                 },
                 new CommandParameter()
                 {
                     Token = "C",
                     Description = "Parameter 3",
                     Optional = false,
-                    ValueType = typeof(float)
+                    ValueType = "float"
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G10 A B1 C2.3 B1";
 
             // Act / Assert
             Assert.ThrowsAny<DuplicateCommandParameterException>(() =>
             {
-                sut.Validate(commandText);
+                sut.Validate(
+                    definition,
+                    commandText);
             });
         }
 
@@ -228,17 +253,22 @@ namespace MarlinToolset.Core.UnitTests.CommandProcessors
                     Optional = false
                 }
             };
-            var sut = new TestableCommandProcessor(
-                "G10",
-                "This is some command",
-                "http://www.somewebsite.com/docs/commands/g10",
-                parameters);
+            var definition = new CommandDefinition()
+            {
+                Key = "G10",
+                Description = "This is some command",
+                Url = "http://www.somewebsite.com/docs/commands/g10",
+                Parameters = parameters
+            };
+            var sut = new CommandValidator();
             var commandText = "G11 A";
 
             // Act / Assert
             Assert.Throws<CommandKeyIncorrectException>(() =>
             {
-                sut.Validate(commandText);
+                sut.Validate(
+                    definition,
+                    commandText);
             });
         }
     }

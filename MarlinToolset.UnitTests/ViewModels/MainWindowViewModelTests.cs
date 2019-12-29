@@ -32,7 +32,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>());
+                null,
+                null);
 
             mockPrintersConfigurationView.Setup(x => x.ShowDialog())
                 .Returns(false);
@@ -56,7 +57,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -87,7 +89,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -111,7 +114,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -136,7 +140,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -179,7 +184,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -217,7 +223,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };
@@ -254,7 +261,8 @@ namespace MarlinToolset.UnitTests.ViewModels
                 _mockServiceProvider.Object,
                 _mockPrinterConfigurationManagerService.Object,
                 _mockPrinterControllerSevice.Object,
-                new List<ICommandProcessorService>())
+                null,
+                null)
             {
                 SelectedPrinter = new PrinterConfigurationModel()
             };

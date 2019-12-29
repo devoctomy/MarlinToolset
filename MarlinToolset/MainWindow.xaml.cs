@@ -55,8 +55,7 @@ namespace MarlinToolset
                 this.BindCommand(
                     this.ViewModel,
                     viewModel => viewModel.Send,
-                    view => view.SendButton,
-                    vm => vm.CommandText)
+                    view => view.SendButton)
                 .DisposeWith(disposableRegistration);
 
                 ViewModel.TerminalListBox = TerminalListBox;
@@ -76,7 +75,6 @@ namespace MarlinToolset
                     }
             }
         }
-
         private void CommandTextBox_PreviewKeyDown(
             object sender,
             System.Windows.Input.KeyEventArgs e)

@@ -1,36 +1,24 @@
 ﻿using MarlinToolset.Core.Exceptions;
-using MarlinToolset.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MarlinToolset.Core.CommandProcessors
+namespace MarlinToolset.Core.Services
 {
-    public class CommandProcessorBase : ICommandProcessorService
+    public class CommandValidator : ICommandValidator
     {
-        public virtual string Key { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
-
-        public virtual string Description { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
-
-        public virtual string Url { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
-
-        public virtual IList<CommandParameter> Parameters { get => throw new System.NotImplementedException(); protected set => throw new System.NotImplementedException(); }
-
-        public virtual bool Process(PrinterCommand command)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Validate(string commandText)
+        public void Validate(
+            CommandDefinition commandDefinition,
+            string commandText)
         {
             var commandParts = commandText.Split(' ');
-            if (commandParts[0] != Key) throw new CommandKeyIncorrectException(commandParts[0], Key);
+            if (commandParts[0] != commandDefinition.Key) throw new CommandKeyIncorrectException(commandParts[0], commandDefinition.Key);
 
             var referencedParameters = new List<CommandParameter>();
             for (int curPart = 1; curPart < commandParts.Length; curPart++)
             {
                 var token = commandParts[curPart][0].ToString().ToUpper();
-                var parameter = Parameters.SingleOrDefault(x => x.Token == token);
+                var parameter = commandDefinition.Parameters.SingleOrDefault(x => x.Token == token);
                 if (parameter == null)
                 {
                     throw new UnknownCommandParameterException(token);
@@ -56,7 +44,7 @@ namespace MarlinToolset.Core.CommandProcessors
                 }
             }
 
-            var unreferencedRequired = Parameters
+            var unreferencedRequired = commandDefinition.Parameters
                 .Where(x => !x.Optional && !referencedParameters.Contains(x));
 
             if (unreferencedRequired.Any())

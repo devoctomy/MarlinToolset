@@ -29,7 +29,6 @@ namespace MarlinToolset.ViewModels
         public IPrinterConfigurationManagerService PrinterConfigurationManagerService { get; set; }
         public ObservableCollection<PrinterPacket> Packets { get; }
         [Reactive] public string CommandText { get; set; }
-        [Reactive] public ICommandProcessorService CurrentCommandProcessor { get; private set; }
         public ReactiveCommand<Unit, Unit> Send { get; }
         public List<string> CommandHistory { get; }
         public ReactiveCommand<Unit, Unit> PreviousCommand { get; set; }
@@ -37,21 +36,24 @@ namespace MarlinToolset.ViewModels
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IPrinterControllerService _printerControllerService;
-        private readonly IEnumerable<ICommandProcessorService> _commandProcessors;
+        private readonly ICommandValidator _commandValidator;
+        private readonly ICommandsDefinitionLoaderService _commandsDefinitionLoaderService;
         private int _historyIndex = 0;
 
         public MainWindowViewModel(
             IServiceProvider serviceProvider,
             IPrinterConfigurationManagerService printerConfigurationManagerService,
             IPrinterControllerService printerControllerService,
-            IEnumerable<ICommandProcessorService> commandProcessors)
+            ICommandValidator commandValidator,
+            ICommandsDefinitionLoaderService commandsDefinitionLoaderService)
         {
             _serviceProvider = serviceProvider;
             _printerControllerService = printerControllerService;
             PrinterConfigurationManagerService = printerConfigurationManagerService;
+            _commandValidator = commandValidator;
+            _commandsDefinitionLoaderService = commandsDefinitionLoaderService;
             ValidationContext = new ValidationContext();
             CommandHistory = new List<string>();
-            _commandProcessors = commandProcessors;
 
             printerControllerService.ReceivedData += PrinterControllerService_ReceivedData;
 
@@ -61,8 +63,6 @@ namespace MarlinToolset.ViewModels
             Send = ReactiveCommand.Create(new Action(OnSend));
             PreviousCommand = ReactiveCommand.Create(new Action(OnPreviousCommand));
             NextCommand = ReactiveCommand.Create(new Action(OnNextCommand));
-
-            PropertyChanged += MainWindowViewModel_PropertyChanged;
         }
 
         private void PrinterControllerService_ReceivedData(
@@ -115,6 +115,14 @@ namespace MarlinToolset.ViewModels
             if (SelectedPrinter != null && _printerControllerService.IsConnected)
             {
                 var data = CommandText;
+                var commandDefinition = _commandsDefinitionLoaderService.CommandDefinitions.GetFromCommandText(data);
+                if(commandDefinition != null)
+                {
+                    _commandValidator.Validate(
+                        commandDefinition,
+                        data);
+                }
+
                 CommandText = string.Empty;
                 _printerControllerService.Write(
                     $"{data}\n",
@@ -142,34 +150,6 @@ namespace MarlinToolset.ViewModels
                 var index = CommandHistory.Count - _historyIndex;
                 CommandText = CommandHistory[index];
             }
-        }
-
-        private void MainWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch(e.PropertyName)
-            {
-                case "CommandText":
-                    {
-                        var command = CommandText.Trim();
-                        if (!string.IsNullOrWhiteSpace(command))
-                        {
-                            CurrentCommandProcessor = _commandProcessors.SingleOrDefault(
-                                x => x.Key.Equals(
-                                    command,
-                                    StringComparison.InvariantCultureIgnoreCase));                      
-                        }
-
-                        break;
-                    }
-            }
-        }
-
-        public ICommandProcessorService GetCommandProcessorService(string command)
-        {
-            return _commandProcessors.FirstOrDefault(x => 
-            x.Key.Equals(
-                command,
-                StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

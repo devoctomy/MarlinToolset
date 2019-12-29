@@ -19,7 +19,7 @@
           "Token": "C",
           "Description": "-",
           "Optional": true,
-          "Requires": "P1,P2,P3,Z"
+          "Requires": "[P1,P2,P3,Z]"
         },
         {
           "Token": "D",
@@ -35,6 +35,100 @@
         {
           "Token": "F",
           "Description": "Fade height.",
+          "Optional": true,
+          "Type": "float"
+        },
+        {
+          "Token": "H",
+          "Description": "Height.",
+          "Optional": true,
+          "Type": "float"
+        },
+        {
+          "Token": "I",
+          "Description": "Invalidate a number of mesh points (default 1).",
+          "Optional": true,
+          "Type": "int",
+          "DefaultValue": 1
+        },
+        {
+          "Token": "J",
+          "Description": "Grid (or 3-Point) leveling (default 3).",
+          "Optional": true,
+          "Type": "int",
+          "DefaultValue": 3
+        },
+        {
+          "Token": "K",
+          "Description": "Subtract (diff) the stored mesh with the given index from the current mesh.",
+          "Optional": true,
+          "Type": "int"
+        },
+        {
+          "Token": "L",
+          "Description": "Load a mesh. If no index is given, load the previously-activated mesh.",
+          "Optional": true,
+          "Type": "int"
+        },
+        {
+          "Token": "P",
+          "Description": "Phase commands are used for the bulk of the work to setup a Mesh.",
+          "Optional": true,
+          "Type": "int",
+          "Choices": "0,1,2,3,4,5,6"
+        },
+        {
+          "Token": "Q",
+          "Description": "Load the specified Test Pattern to check for correct operation.",
+          "Optional": true,
+          "Type": "int"
+        },
+        {
+          "Token": "R",
+          "Description": "Repeat count (default GRID_MAX_POINTS_X * GRID_MAX_POINTS_Y).",
+          "Optional": true,
+          "Type": "int"
+        },
+        {
+          "Token": "S",
+          "Description": "Save the mesh to EEPROM in the given slot.",
+          "Optional": true,
+          "Type": "int"
+        },
+        {
+          "Token": "T",
+          "Description": "Save the mesh to EEPROM in the given slot (default 0).",
+          "Optional": true,
+          "Type": "int",
+          "Choices": "0,1"
+        },
+        {
+          "Token": "U",
+          "Description": "Probe the outer perimeter to assist bed tramming (use with G29 P1 O).",
+          "Optional": true,
+          "Requires": "(P1,T)"
+        },
+        {
+          "Token": "V",
+          "Description": "Verbosity Level (0-4).",
+          "Optional": true,
+          "Type": "int",
+          "Choices": "0,1,2,3,4"
+        },
+        {
+          "Token": "W",
+          "Description": "Display valuable UBL data.",
+          "Optional": true
+        },
+        {
+          "Token": "X",
+          "Description": "Position for all phases and commands (default current X).",
+          "Optional": true,
+          "Type": "float"
+        },
+        {
+          "Token": "Y",
+          "Description": "Position for all phases and commands (default current Y).",
           "Optional": true,
           "Type": "float"
         }

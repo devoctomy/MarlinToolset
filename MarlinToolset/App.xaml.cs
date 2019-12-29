@@ -24,7 +24,6 @@ namespace MarlinToolset
             ConfigureReactive(serviceCollection);
             ConfigureServices(serviceCollection);
             ConfigureViewsAndViewModels(serviceCollection);
-            ConfigureCommandProcessors(serviceCollection);
             ServiceProvider = serviceCollection.BuildServiceProvider();
             ServiceProvider.UseMicrosoftDependencyResolver();               //This has to be re-registered for Splat    
         }
@@ -61,6 +60,13 @@ namespace MarlinToolset
                 return new MarlinPrinterPacketParser(options);
             });
             services.AddSingleton<ISerialPortAdapter, SerialPortAdapter<WrappedSerialPort>>();
+            services.AddTransient<ICommandValidator, CommandValidator>();
+            services.AddTransient<ICommandsDefinitionLoaderService, CommandsDefinitionLoaderService>(x =>
+            {
+                var service = new CommandsDefinitionLoaderService();
+                service.Load("Config\\MarlinCommands.json");
+                return service;
+            });
         }
 
         private void ConfigureViewsAndViewModels(IServiceCollection services)
@@ -71,24 +77,6 @@ namespace MarlinToolset
             services.AddTransient<MainWindowViewModel>();
             services.AddTransient<PrinterConfigurationViewModel>();
             services.AddTransient<PrintersConfigurationViewModel>();
-        }
-
-        private void ConfigureCommandProcessors(IServiceCollection services)
-        {
-            var assembly = Assembly.GetAssembly(typeof(ICommandProcessorService));
-
-            var type = typeof(ICommandProcessorService);
-            var types = assembly.GetTypes()
-                .Where(p => type.IsAssignableFrom(p) && ! p.IsInterface)
-                .ToArray();
-
-            foreach(var curProcessor in types)
-            {
-                services.AddTransient<ICommandProcessorService>(sp =>
-                {
-                    return (ICommandProcessorService)Activator.CreateInstance(curProcessor);
-                });
-            }
         }
 
         protected override void OnStartup(StartupEventArgs e)
