@@ -115,12 +115,15 @@ namespace MarlinToolset.ViewModels
             if (SelectedPrinter != null && _printerControllerService.IsConnected)
             {
                 var data = CommandText;
-                var commandDefinition = _commandsDefinitionLoaderService.CommandDefinitions.GetFromCommandText(data);
-                if(commandDefinition != null)
+                if(_commandsDefinitionLoaderService != null)
                 {
-                    _commandValidator.Validate(
-                        commandDefinition,
-                        data);
+                    var commandDefinition = _commandsDefinitionLoaderService.CommandDefinitions.GetFromCommandText(data);
+                    if (commandDefinition != null)
+                    {
+                        _commandValidator.Validate(
+                            commandDefinition,
+                            data);
+                    }
                 }
 
                 CommandText = string.Empty;
